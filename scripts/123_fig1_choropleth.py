@@ -1,5 +1,5 @@
 """Manuscript Figure 1 — CHOROPLETH of the analysis regionalisation (replaces the kernel-smoothed
-surfaces; NM review comments #55/#56 and Evelyn 2026-08-11: show the outcomes the analysis uses,
+surfaces; show the outcomes the analysis uses,
 on the units the analysis uses).
 
 2x3 panels: columns = notified TB incidence (age-std), TB mortality (age-std), LTFU (age-adjusted

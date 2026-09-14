@@ -72,4 +72,4 @@ for mode, label in [("crude", "crude"), ("agestd", "age-standardised")]:
     print(f"  {label:17s}: top-20% share {top20:5.2f}%   Gini {gini:.3f}"
           f"   -> reported as {top20:.0f}% / {gini:.2f}")
 print()
-print("  appendix v11 currently states: 24% crude (Gini 0.23), 22% age-standardised (Gini 0.21)")
+print("  earlier draft values for comparison: 24% crude (Gini 0.23), 22% age-standardised (Gini 0.21)")

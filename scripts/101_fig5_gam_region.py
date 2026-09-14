@@ -27,7 +27,7 @@ for i,(pk,plab,logx) in enumerate(PRED):
         sub=d.dropna(subset=[pk,ok,"pop"]); sub=sub[sub[pk]>0] if logx else sub
         xv=sub[pk].values; y=sub[ok].values; w=sub["pop"].values; xf=np.log10(xv) if logx else xv
         ax.scatter(xv,y,s=8,c="#1f6f8b",alpha=0.15,edgecolors="none")
-        # low-complexity smooth (n_splines capped) to avoid the overfitting the advisor flagged
+        # low-complexity smooth (n_splines capped) to avoid overfitting
         gam=LinearGAM(s(0,n_splines=4,lam=10)).fit(xf.reshape(-1,1),y,weights=w)
         if logx:
             xxv=np.logspace(np.log10(np.percentile(xv,1)),np.log10(np.percentile(xv,99)),120); xxf=np.log10(xxv)

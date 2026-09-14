@@ -1,4 +1,4 @@
-"""Manuscript temporal-stability ALLUVIAL (advisor idea): rank regions by TB incidence into
+"""Manuscript temporal-stability ALLUVIAL : rank regions by TB incidence into
 quintiles in each 3-year period (2013–15, 2016–18, 2019–21, 2022–24) and show how regions flow
 between quintiles over time. Quintiles (not deciles) because ~4 cases/region per 3-year period make
 finer bins noise-dominated. Eligible regions (>=10 cases over the decade). Ribbons coloured by the

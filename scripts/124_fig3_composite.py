@@ -25,7 +25,7 @@ SPEC ARCHAEOLOGY (2026-08-11, vs the manuscript image):
   Q1-reference, direct standardisation, crude reference, fractional/left/mid quintile
   boundaries, per-lens eligibility, alternative income aggregations, region-count quintiles.
   DO NOT silently update the manuscript numbers to this script's output — the delta is
-  documented in docs/dead-ends.md and needs an author decision.
+  see the header of this script.
 Output: /tmp/fig3_composite.png
 """
 import pandas as pd, numpy as np, matplotlib, matplotlib.pyplot as plt
@@ -82,7 +82,7 @@ dev_c=max(abs(e-m)/m for e,m in zip(gC["excess"][1:],MS["c_exc"]))
 print(f"vs manuscript insets: totals {gB['excess'][1:].sum():,.0f} vs {MS['b_tot']:,} and "
       f"{gC['excess'][1:].sum():,.0f} vs {MS['c_tot']:,}; max per-bar dev {dev_b:.1%} / {dev_c:.1%}")
 print("FLAG: manuscript inset excesses are from the lost 2026-07-08 spec — closest, not exact"
-      " (see header + docs/dead-ends.md)" if dev_b>0.005 or dev_c>0.005 else "insets reproduced exactly")
+      " (see header)" if dev_b>0.005 or dev_c>0.005 else "insets reproduced exactly")
 # sensitivity: 122-style SIR excess (reference = least-deprived quintile's SIR)
 for lab,g in [("inc",gB),("mort",gC)]:
     sir=g["n"]-g["E"]*(g.loc[0,"n"]/g.loc[0,"E"])

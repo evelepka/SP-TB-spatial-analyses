@@ -1,6 +1,6 @@
-"""Age standardisation of all geospatial TB metrics (advisor request): incidence,
+"""Age standardisation of all geospatial TB metrics (sensitivity analysis): incidence,
 abandonment (LTFU), and TB mortality, per geographic unit, adjusted for the age
-structure of each place. TB mortality is reported with BOTH denominators (advisor):
+structure of each place. TB mortality is reported with BOTH denominators:
 a RATE per population (deaths/100k/yr) and a PROPORTION of ALL notified cases
 (deaths/notified, not restricted to evaluated/in-treatment cases — the older CFR is
 dropped). The TB-death marker is the integrated TBWeb 'Óbito TB' OR SIM TB (A15-A19,
@@ -115,7 +115,7 @@ d["inc_crude"]=np.where(d["n"]>=10,d["n"]/(d["pop"]*T)*1e5,np.nan)
 d["inc_adj"]=np.where((d["n"]>=10)&(d["E_inc"]>0),d["n"]/d["E_inc"]*state_inc,np.nan)
 d["ltfu_crude"]=np.where(d["ne"]>=10,d["na"]/d["ne"]*100,np.nan)
 d["ltfu_adj"]=np.where((d["ne"]>=10)&(d["E_ab"]>0),d["na"]/d["E_ab"]*state_ab,np.nan)
-# TB mortality, two denominators (advisor): RATE per population, and PROPORTION of all notified cases
+# TB mortality, two denominators: RATE per population, and PROPORTION of all notified cases
 d["drate_crude"]=np.where(d["n"]>=10,d["nd"]/(d["pop"]*T)*1e5,np.nan)              # TB mortality RATE /100k/yr
 d["drate_adj"]=np.where((d["n"]>=10)&(d["E_dr"]>0),d["nd"]/d["E_dr"]*state_drate,np.nan)
 d["mortprop_crude"]=np.where(d["n"]>=10,d["nd"]/d["n"]*100,np.nan)                 # TB mortality PROPORTION (% of ALL notified)

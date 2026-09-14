@@ -1,4 +1,4 @@
-"""Manuscript Figure 2 (regionalisation), COMBINED 2x2 (advisor: bigger maps, smaller Venn):
+"""Manuscript Figure 2 (regionalisation), COMBINED 2x2 (2x2 layout):
 (a) TB-incidence, (b) TB-mortality, (c) treatment-loss to follow-up hotspot maps at the metropolitan
 scale (Greater SP + Baixada) — hotspot regions (top 20% of the adult population) solid-coloured,
 the rest grey — and (d) a 4-set Venn of the top-20% hotspot overlap (incidence, mortality,

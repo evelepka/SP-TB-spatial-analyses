@@ -194,7 +194,7 @@ mktable(["Geocoded set","Episodes, n","Notifications","TB mortality","Loss to fo
              "highest-rate regions (LTFU as the proportion of evaluated episodes, as in the main analysis). "
              "Concentration is essentially unchanged when postal-code-level cases are excluded.")
 # S5/S6 — recovered verbatim from the 2026-08-04 dated supplement (generator scripts lived in a
-# lost session /tmp; re-scripting is a registered task with these values as validation targets)
+# (values kept as validation targets)
 tblcap("Supplementary Table S5.","Out-of-sample capture of notified cases at matched 20% population coverage.")
 mktable(["Training window","Test window","Region-level hotspots","Whole municipalities","No targeting"],
         [["2013–2018","2019–2024","44%","16%","20%"],

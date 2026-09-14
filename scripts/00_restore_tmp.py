@@ -1,7 +1,7 @@
-"""Restore the persistent analytic artifacts into /tmp at the start of a session.
+"""Restore the persistent analytic artifacts into /tmp before running the pipeline.
 
-/tmp is cleared between sessions, but the expensive/authoritative intermediates are persisted in
-Drive `Data/analytic/`. Run this FIRST each session so the /tmp-based scripts (100, 101-109, ...)
+The expensive intermediates are persisted in
+Drive `Data/analytic/`. Run this first so the /tmp-based scripts (100, 101-109, ...)
 find their inputs without re-running the costly CNEFE matching or regionalisation.
 
     python3 scripts/00_restore_tmp.py

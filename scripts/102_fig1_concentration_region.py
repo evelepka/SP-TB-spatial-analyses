@@ -11,7 +11,7 @@ from venn import venn
 np.random.seed(20240625); matplotlib.rcParams.update({"font.family":"sans-serif","font.size":11})
 SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
 BD="/DATA_ROOT/Abandonment Outcomes/Abandonment Paper/Banco de dados"
-# RANK BASIS (decision Jason 2026-08-11): regions are ranked by AGE-STANDARDIZED rate
+# RANK BASIS: regions are ranked on the basis chosen in rank_basis.py (crude by default, ADR-0006)
 # (observed/expected, expectations E_inc/E_dr/E_ab from script 100 — indirect standardisation,
 # State reference) in the primary analysis; RANK=crude reproduces the crude ranking for the
 # supplementary robustness figure. Events accumulated are always ACTUAL events.

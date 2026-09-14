@@ -1,4 +1,4 @@
-"""Verify the numeric claims in v12 against the analytic tables."""
+"""Verify the numeric claims of the manuscript against the analytic tables."""
 import numpy as np, pandas as pd
 from scipy.stats import zscore, spearmanr
 

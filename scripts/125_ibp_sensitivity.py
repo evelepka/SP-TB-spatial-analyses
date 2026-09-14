@@ -3,7 +3,7 @@
 Builds an index on the domains of the Brazilian Deprivation Index (IBP: income, education,
 sanitation) from the 2022 Census sector data, then reports:
  (1) construct-validity concordance (Spearman, sector level): composite x IPVS, composite x
-     IBP-style, IBP-style x IPVS  [recovered session targets: 0.76 / 0.92 / 0.72]
+     IBP-style, IBP-style x IPVS  [reference values: 0.76 / 0.92 / 0.72]
  (2) robustness of the hotspot-deprivation divergence (region-level Cohen's d, hotspot vs rest)
      under composite vs IBP-style index  [targets: +0.44/+0.24/-0.06 vs +0.21/+0.07/-0.11]
  (3) sanitation coverage in SP  [targets: 95.5% adequate; 87% of pop in sectors <=5% inadequate]

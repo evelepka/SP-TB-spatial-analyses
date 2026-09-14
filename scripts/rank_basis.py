@@ -5,7 +5,7 @@ RANK=crude  (default) primary analysis: incidence/mortality per adult population
 RANK=std               age-standardized (observed/expected, indirect, State reference; LTFU age-
                        adjusted proportion) — the pre-2026-09 primary, now the sensitivity analysis.
                        Output files suffixed _std.
-RANK=percap            LTFU as events per capita (dead end, docs/dead-ends.md) — kept only to
+RANK=percap            LTFU as events per capita (historical basis) — kept only to
                        regenerate the historical figure on request. Suffix _percap.
 
 Import:  from rank_basis import RANK, SUF, RATE, RATE_LABEL, rank_base

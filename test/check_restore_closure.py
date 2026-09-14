@@ -2,10 +2,8 @@
 """Every /tmp file the 100-series READS must be either restored by 00_restore_tmp.py or
 WRITTEN by another pipeline script.
 
-Why: /tmp is cleared between sessions. On 2026-08-10, region_cases.csv — read by 11 scripts —
-was missing from 00_restore's FILES list, so any session that restored and then ran a figure
-script without first re-running 100_region_units.py crashed (or worse, read a stale file left
-by an earlier same-day run). This check makes that class of gap impossible to reintroduce.
+Why: /tmp is not persistent. A /tmp input that is neither restored nor produced by a pipeline
+script would make a figure script fail, or read a stale file, depending on what ran before.
 
 Exit 0 = closed. Exit 1 = some read /tmp file has no producer and is not restored.
 """

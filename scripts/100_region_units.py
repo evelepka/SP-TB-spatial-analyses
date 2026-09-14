@@ -1,9 +1,9 @@
 """Foundation for the regionalisation-based MANUSCRIPT: per-REGION dataset with age-
 standardised outcomes (incidence, TB-mortality rate, abandonment, TB-mortality %, case-
 fatality), the place-vulnerability composite, the individual vulnerability components
-(income, % favela, illiteracy, residents/household — NO density per advisor), and top-20%
+(income, % favela, illiteracy, residents/household — no population density, ADR-0004), and top-20%
 hotspot flags by lens. Unit = REGIONALISATION (region_id, /tmp/regions_sectors.csv); the
-advisor prefers it over the operational unit. Age-standardisation engine reused from
+ADR-0003. Age-standardisation engine reused from
 script 78 (indirect, SP internal reference). Output: /tmp/region_units.csv
 """
 import pandas as pd, geopandas as gpd, numpy as np, zipfile, re

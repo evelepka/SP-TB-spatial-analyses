@@ -6,9 +6,7 @@ one row per person/episode (sinan_clean id, sector, outcomes) and must never ent
 the rule PIPELINE.md states in prose, enforced here.
 
 WARN (exit 0 with output): a tracked CSV under outputs/ contains case-count cells of 1-4.
-Small-area counts below 5 are a disclosure risk if the repo is ever made public or shared.
-Policy (suppress vs keep-private-only) is an owner decision — recorded where this warning
-points once decided.
+Small-area counts below 5 are a disclosure risk; no such files are tracked in this repository.
 """
 import csv, re, subprocess, sys
 from pathlib import Path

@@ -2,9 +2,8 @@
 """Golden check: the persisted analytic artifacts must match test/artifact_pins.json exactly,
 and the STROBE figure's hardcoded analytic n must match region_cases.csv.
 
-Numbers live in THREE places that have already drifted apart once (manuscript/PIPELINE.md
-carried the pre-episode-rebuild flow for five weeks): the artifact, the STROBE figure literals
-in scripts/114_figS_strobe.py, and the docs. This check ties them together.
+The cohort counts live in three places: the artifacts, the STROBE figure literals in
+scripts/114_figS_strobe.py, and manuscript/PIPELINE.md. This check ties them together.
 
 Exit 0 = all pinned values match. Exit 1 = drift. Exit 3 = analytic store not reachable (SKIP).
 """

@@ -1,9 +1,7 @@
 #!/bin/bash
 # run_fast.sh — the FAST tier: one entry point, seconds. Plumbing, not science.
 #
-# 134 scripts, no tests, and manuscript numbers that have already drifted from the data once
-# (commit 1c37302) and from the docs once (PIPELINE.md's STROBE block, fixed 2026-08-10).
-# This is the one command to run before claiming anything is done.
+# One command that checks the pipeline plumbing, the pinned cohort numbers and the privacy rule.
 #
 #   bash test/run_fast.sh            # all
 #   bash test/run_fast.sh --list     # names only

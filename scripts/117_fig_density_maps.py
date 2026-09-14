@@ -1,5 +1,5 @@
 """Manuscript Figure — smoothed DENSITY (per-capita rate) surfaces for the three outcomes, as ONE
-2x3 figure (advisor): row 1 (A,B,C) the ENTIRE state; row 2 (D,E,F) a zoom on the metropolitan areas
+2x3 figure: row 1 (A,B,C) the ENTIRE state; row 2 (D,E,F) a zoom on the metropolitan areas
 (São Paulo metropolitan region + Baixada Santista) with municipal boundaries. Columns = TB incidence,
 TB mortality, LTFU, each with its own colour scheme. Each panel = a kernel-smoothed RATE surface =
 KDE(cases) / KDE(population) — the spatial density of the outcome adjusted for where people live.
@@ -48,7 +48,7 @@ BND=state_boundary(); MUN=zoom_munis()
 
 sec=sec[np.isfinite(sec.x)&np.isfinite(sec.y)&(sec.pop15>0)]
 x=sec.x.values; y=sec.y.values; T=2024-2013+1  # 12 years → annualise
-CMAP={"inc":"YlOrRd","mort":"BuPu","ltfu":"YlGnBu"}   # different colour scheme per outcome (advisor)
+CMAP={"inc":"YlOrRd","mort":"BuPu","ltfu":"YlGnBu"}   # different colour scheme per outcome
 OUT=[("n_inc","Incidence","inc"),("n_mort","Mortality","mort"),("n_ltfu","LTFU","ltfu")]
 # incidence has far more case points than mortality/LTFU → its dots are drawn smaller and fainter
 DOT={("state","inc"):(0.3,0.06),("state","rare"):(1.5,0.40),("zoom","inc"):(1.2,0.10),("zoom","rare"):(3.5,0.45)}

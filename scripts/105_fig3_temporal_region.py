@@ -5,7 +5,7 @@
     SOURCE quintile of each step (colour resets each period), showing the transition structure period
     to period (eligible regions, >=10 cases over the decade; quintiles not deciles because ~6
     cases/region per period make finer bins noise-dominated).
-Years grouped into 3-year periods (advisor) to remove year-to-year noise; the de-noised cross-fit
+Years grouped into 3-year periods to remove year-to-year noise; the de-noised cross-fit
 removes the rare-event bias within each period. Reads /tmp/region_cases.csv + /tmp/region_units.csv.
 Output: /tmp/fig3_temporal_region.png
 """
@@ -14,7 +14,7 @@ from matplotlib.path import Path
 import matplotlib.patches as mpatches
 from scipy.stats import spearmanr
 np.random.seed(20240625); matplotlib.rcParams.update({"font.family":"sans-serif","font.size":11})
-# RANK BASIS (decision Jason 2026-08-11): standardized (observed/expected) primary; RANK=crude
+# RANK BASIS: crude is primary (ADR-0006); RANK=std
 # for the supplementary robustness version. E_* are full-period expectations from script 100 —
 # their scale cancels in a within-period ranking, so the same vector serves every period.
 import sys; sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
@@ -64,7 +64,7 @@ print(f"[{RANK}] de-noised top-20% share by period:",{ln:[round(x) for x in SH[l
 print(f"[{RANK}] Jaccard between periods:",{ln:[round(x,2) for x in JAC[ln]] for ln,_,_,_ in OUTC})
 
 # ── panel (d) alluvial: incidence-quintile flow; ribbons coloured by the SOURCE quintile of each
-#    step (colour RESETS each period — advisor's preferred version; 5 ribbons out of each block).
+#    step (colour RESETS each period — 5 ribbons out of each block).
 #    Eligible regions (>=10 cases over the decade). ──
 NB=5; rege=reg[reg["n"]>=10].reset_index(drop=True)          # eligible regions for the alluvial
 Q=pd.DataFrame(index=rege["region_id"])

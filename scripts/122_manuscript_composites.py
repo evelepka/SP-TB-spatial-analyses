@@ -1,7 +1,7 @@
 """Manuscript composite figures 2 and 5, built end-to-end from the analytic artifacts.
 
 These composites previously had NO in-repo builder (the PAF and out-of-sample panels were
-assembled in lost session scripts — the same 'number without a script' debt as the STROBE flow).
+assembled outside the pipeline).
 This script is now their single source.
 
 Figure 2 (2x2): (a) de-noised Lorenz curves  (b) de-noised shares at 5/10/20/40% of population

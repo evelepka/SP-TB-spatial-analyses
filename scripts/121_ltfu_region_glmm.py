@@ -1,4 +1,4 @@
-"""Independent place effect on LTFU (ADR-0005 companion; Evelyn+Jason 2026-08-11).
+"""Independent place effect on LTFU (ADR-0005 companion).
 
 Builds the individual-level dataset (same episode filter as the paper), fits three nested
 logistic mixed models in R/lme4 (random region intercept), and persists the summary:

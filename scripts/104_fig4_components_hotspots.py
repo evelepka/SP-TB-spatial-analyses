@@ -2,7 +2,7 @@
 (income, % favela, illiteracy, residents/household — all oriented so higher = more deprived)
 and the three hotspot types (incidence, mortality, loss to follow-up). Metric = standardized mean
 difference (Cohen's d) of each component between hotspot and non-hotspot eligible regions.
-TWO layout options (advisor to pick): A) grouped by component, B) grouped by hotspot type.
+TWO layout options (option A used): A) grouped by component, B) grouped by hotspot type.
 Reads /tmp/region_units.csv. Output: /tmp/fig4_components_hotspots.png
 """
 import pandas as pd, numpy as np, matplotlib, matplotlib.pyplot as plt
@@ -21,7 +21,7 @@ M=np.array([[cohend(c,l) for l,_,_ in LENS] for c,_ in COMP])   # rows=comp, col
 print("Cohen's d (component × hotspot type):")
 print(pd.DataFrame(M,index=[c[1] for c in COMP],columns=[l[1] for l in LENS]).round(2).to_string())
 
-fig,axA=plt.subplots(1,1,figsize=(9,5.6))   # advisor: use the grouped-by-component layout
+fig,axA=plt.subplots(1,1,figsize=(9,5.6))   # grouped-by-component layout
 xc=np.arange(len(COMP)); w=0.25
 for j,(l,ln,col) in enumerate(LENS): axA.bar(xc+(j-1)*w,M[:,j],w,color=col,label=ln)
 axA.set_xticks(xc); axA.set_xticklabels([c[1] for c in COMP]); axA.axhline(0,color="#333",lw=0.8)
