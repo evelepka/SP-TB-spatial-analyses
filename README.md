@@ -2,9 +2,6 @@
 
 Geocoding pipeline and spatial analyses for tuberculosis cohort work in São Paulo, Brazil.
 
-This repo holds code only. All data lives in Google Drive at
-`~/Library/CloudStorage/GoogleDrive-jasonandr@gmail.com/My Drive/Abandonment Paper/Data/`
-and is referenced via `config.py`.
 
 ## Structure
 
