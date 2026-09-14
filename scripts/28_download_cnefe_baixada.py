@@ -9,7 +9,7 @@ not part of the contiguous urban agglomeration), so we hardcode CD_MUN here.
 
 import os, time, requests
 
-SPATIAL = "/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SPATIAL = "/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
 DEST = f"{SPATIAL}/IBGE_2022_extended/CNEFE_Baixada"
 os.makedirs(DEST, exist_ok=True)
 

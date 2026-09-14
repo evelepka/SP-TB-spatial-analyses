@@ -5,7 +5,7 @@ Also reproduce the pooled top-20% shares reported in the Results.
 """
 import numpy as np, pandas as pd
 
-AN = "/Users/jasonandrews/Library/CloudStorage/GoogleDrive-jasonandr@gmail.com/My Drive/SP-TB-spatial-analyses/Data/analytic"
+AN = "/DATA_ROOT/SP-TB-spatial-analyses/Data/analytic"
 reg = pd.read_csv(f"{AN}/region_units.csv", dtype={"region_id": str})[["region_id", "pop", "n"]]
 reg = reg[reg["pop"] > 0]
 co = pd.read_csv(f"{AN}/region_cases.csv", dtype={"region_id": str})

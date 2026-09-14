@@ -1,6 +1,6 @@
 import numpy as np, pandas as pd
 
-AN = "/Users/jasonandrews/Library/CloudStorage/GoogleDrive-jasonandr@gmail.com/My Drive/SP-TB-spatial-analyses/Data/analytic"
+AN = "/DATA_ROOT/SP-TB-spatial-analyses/Data/analytic"
 reg = pd.read_csv(f"{AN}/region_units.csv", dtype={"region_id": str})
 T = 12
 rng = np.random.default_rng(20260718)

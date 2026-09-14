@@ -7,7 +7,7 @@ age-adjusted proportion of evaluated episodes (observed/expected x crude state p
 """
 import numpy as np, pandas as pd
 
-AN = "/Users/jasonandrews/Library/CloudStorage/GoogleDrive-jasonandr@gmail.com/My Drive/SP-TB-spatial-analyses/Data/analytic"
+AN = "/DATA_ROOT/SP-TB-spatial-analyses/Data/analytic"
 reg = pd.read_csv(f"{AN}/region_units.csv", dtype={"region_id": str})
 co = pd.read_csv(f"{AN}/region_cases.csv", dtype={"region_id": str})
 pv = reg.set_index("region_id")["pop"]

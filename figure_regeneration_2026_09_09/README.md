@@ -4,7 +4,7 @@ Provenance record for the corrections applied in **manuscript v13** and **append
 
 - Inputs: `Data/analytic/region_units.csv`, `Data/analytic/region_cases.csv`,
   `Data/analytic/ltfu_glmm_summary.json`
-- Superseded scripts: `New_analyses/scripts/build_fig{2,3,5}.py` (see `SUPERSEDED.md` there)
+- Supersedes the earlier `build_fig{2,3,5}.py` scripts (not included here)
 - Corrected scripts: `./scripts/` — run from that directory; they write into `./figures/`
 - Re-runnable checks: `./verification/`
 
@@ -13,7 +13,7 @@ Provenance record for the corrections applied in **manuscript v13** and **append
 ## 1. What was wrong
 
 ### 1.1 Figures 2d, 3b, 3c plotted age-standardised rates while the text described crude rates
-*(flagged by Codex in the v12 figure comments)*
+*(flagged in the v12 figure review)*
 
 `build_fig2.py` panel (d) and `build_fig3.py` panels (b, c) drew the `inc_adj` and
 `drate_adj` columns and carried the axis label "Age-standardised rate per 100,000/yr".
@@ -36,7 +36,7 @@ quintile axis relabelled from "Incidence" to "Notifications" to match manuscript
 Verify with `verification/verify_rates.py`.
 
 ### 1.2 Figures 2a, 2b and 5a plotted LTFU per capita, not per evaluated episode
-*(not flagged by Codex; found while checking 1.1)*
+*(found while checking 1.1)*
 
 All three panels ranked regions by LTFU events ÷ adult population. The primary LTFU
 measure is the **proportion of evaluated episodes**, and the Figure 2 legend explicitly
@@ -55,7 +55,7 @@ in one half and the share of LTFU events is measured in the other, accumulating 
 ("Concentration and hotspot overlap").
 
 ### 1.3 Figure 5b period labels overlapped
-*(flagged by Codex)*
+*(flagged in the v12 figure review)*
 
 **Fix:** `trained 2013-2018 / tested 2019-2024` → compact two-line `2013–18 ↓ 2019–24`.
 

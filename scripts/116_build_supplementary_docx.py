@@ -7,8 +7,7 @@ Output: Drive .../SP-TB-spatial-analyses/Supplementary_material/SP_TB_Manuscript
 import pandas as pd, os, json, shutil
 from docx import Document
 from docx.shared import Pt, RGBColor, Inches
-SUP=("/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/"
-     "My Drive/WHO modelling Project/SP-TB-spatial-analyses/Supplementary_material")
+SUP=("/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Supplementary_material")
 FIG=f"{SUP}/figures"; OUT=f"{SUP}/SP_TB_Manuscript_Supplementary.docx"
 os.makedirs(FIG,exist_ok=True)
 # stage the S-figures from their generating scripts' /tmp outputs (114, 111, 88, 122-crude)

@@ -2,8 +2,7 @@
 Four questions + five figures + captions + brief methods + data limitation. Self-contained HTML.
 """
 import base64, os
-FIGDIR=("/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/"
-        "My Drive/WHO modelling Project/SP-TB-spatial-analyses/Figures_2013-2024_adults")
+FIGDIR=("/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Figures_2013-2024_adults")
 def img(name):
     p=os.path.join(FIGDIR,name)
     if not os.path.exists(p): return f'<p style="color:#b00">[missing: {name}]</p>'

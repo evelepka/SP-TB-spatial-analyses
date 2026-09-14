@@ -7,8 +7,7 @@ Output: Drive .../SP-TB-spatial-analyses/Reports/SP_TB_Manuscript_Methods.docx
 """
 from docx import Document
 from docx.shared import Pt, RGBColor
-OUT=("/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/"
-     "My Drive/WHO modelling Project/SP-TB-spatial-analyses/Reports/SP_TB_Manuscript_Methods.docx")
+OUT=("/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Reports/SP_TB_Manuscript_Methods.docx")
 
 doc=Document()
 st=doc.styles["Normal"]; st.font.name="Calibri"; st.font.size=Pt(11)

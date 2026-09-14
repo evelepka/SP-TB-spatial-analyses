@@ -19,8 +19,8 @@ import pandas as pd, geopandas as gpd, numpy as np, zipfile, re
 import matplotlib, matplotlib.pyplot as plt
 from scipy.stats import spearmanr
 matplotlib.rcParams.update({"font.family":"sans-serif","font.size":11})
-SP="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data"
-BD="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/Abandonment Outcomes/Abandonment Paper/Banco de dados"
+SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
+BD="/DATA_ROOT/Abandonment Outcomes/Abandonment Paper/Banco de dados"
 CAPITAL,FCU_MIN,T="3550308",5000,12   # 2013-2024 = 12 years
 BANDS=["V01034","V01035","V01036","V01037","V01038","V01039","V01040","V01041"]
 EDGES=[15,20,25,30,40,50,60,70,200]   # bin edges for cohort age -> 8 bands

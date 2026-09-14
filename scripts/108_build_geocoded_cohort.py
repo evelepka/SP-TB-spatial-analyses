@@ -13,7 +13,7 @@ Output: /tmp/geocoded_cohort.csv  (sinan_clean, CD_SETOR, CD_TIPO, tier, favela)
 """
 import pandas as pd, geopandas as gpd, numpy as np
 from shapely.geometry import Point
-SP="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
 
 # ── GEOCODING ROWS → unified tier, best per person ─────────────────────────────
 def tier_of(lbl):

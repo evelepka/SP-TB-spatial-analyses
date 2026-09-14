@@ -7,8 +7,8 @@ advisor prefers it over the operational unit. Age-standardisation engine reused 
 script 78 (indirect, SP internal reference). Output: /tmp/region_units.csv
 """
 import pandas as pd, geopandas as gpd, numpy as np, zipfile, re
-SP="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data"
-BD="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/Abandonment Outcomes/Abandonment Paper/Banco de dados"
+SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
+BD="/DATA_ROOT/Abandonment Outcomes/Abandonment Paper/Banco de dados"
 T=12; BANDS=["V01034","V01035","V01036","V01037","V01038","V01039","V01040","V01041"]
 EDGES=[15,20,25,30,40,50,60,70,200]
 def ns(x):

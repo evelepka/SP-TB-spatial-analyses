@@ -1,102 +1,77 @@
 # SP-TB-spatial-analyses
 
-Geocoding pipeline and spatial analyses for tuberculosis cohort work in São Paulo, Brazil.
+Analysis code for a population-based study of the geographic concentration of tuberculosis
+notifications, mortality and loss to follow-up (LTFU) in São Paulo State, Brazil, 2013–2024.
 
+The study geocodes every incident adult TB notification in the state to a residential
+address (IBGE CNEFE address register), aggregates cases into ~7,300 regionalisation units of
+roughly 5,000 adults each, and measures how notifications, TB deaths and LTFU concentrate in
+space, how stable that concentration is over time, and how it relates to a place-vulnerability
+index built from census indicators.
 
-## Structure
+## Data availability and privacy
 
-```
-.
-├── config.py             # Master path configuration (edit BASE_PATH if data moves)
-├── scripts/
-│   ├── 01_geocode_*.py   # CEP → lat/lon geocoding pipeline
-│   ├── 02_download_*.py  # IBGE shapefile / historical data downloads
-│   ├── 02c_extract_mapbiomas.py
-│   ├── 03_spatial_intersection.py
-│   ├── 05_spatial_intersection.py
-│   ├── 06_integrate_spatial_cohort.py
-│   ├── 07_spatial_visualizations.py
-│   ├── 08_download_2010_agsn.py   # 2010 AGSN subnormal agglomerate library
-│   ├── 08b_scrape_cem.py
-│   ├── 08c_download_biblioteca_zip.py
-│   ├── 10_favela_incidence.py
-│   ├── 11_spatial_income_intersection.py
-│   └── 13_income_incidence_abandonment.py
-└── .gitignore            # Blocks data/cache files
-```
+**This repository contains code only. No data are included.**
 
-## Pipeline
+- Individual-level notification data (state TB register) are held by the São Paulo State
+  Department of Health and are available from it subject to ethical approval. They are never
+  committed here: `test/check_privacy.py` fails if any individual-level artifact is tracked, and
+  `.gitignore` blocks all data file types.
+- Census 2022 aggregates, sector boundaries and the CNEFE address register are public and are
+  downloaded from IBGE by the scripts (`scripts/20_*`, `28_*`, `40_*`).
+- Intermediate and aggregated outputs (region-level rates, figures, tables) are written to a
+  local data folder, not to the repository.
 
-### 1. Geocoding (CEP → coordinates)
+## Path configuration
 
-Brazilian CEPs (postal codes) are resolved to lat/lon via layered caches and APIs.
-- `01_geocode_sherlock.py` — main geocoder (Sherlock cluster variant)
-- `01a_geocode_ceps.py` — forward geocoding
-- `01b_geocode_reverse.py` — reverse lookups
-- `01c_geocode_chunk.py`, `01d_geocode_fast.py`, `01e_geocode_async.py` — variants
-- `04_merge_caches.py` — merge CEP caches into `cep_coords_MASTER.json`
+Scripts refer to the project data folder with the placeholder `/DATA_ROOT`. Before running,
+replace it with the location of your data folder (for example with
+`sed -i '' 's#/DATA_ROOT#/path/to/data#' scripts/*.py`). Expensive intermediates are staged in
+`/tmp` and restored from `Data/analytic/` by `scripts/00_restore_tmp.py`. The figure scripts in
+`figure_regeneration_2026_09_09/` read the `SPTB_AN` (analytic folder) and `SPTB_OUT` (output
+folder) environment variables instead.
 
-Cache files produced (stored in Google Drive):
-- `cep_coords_cache.json`
-- `cep_coords_cache_reverse.json`
-- `cep_coords_MASTER.json`
+## Repository layout
 
-### 2. Reference data downloads
+| path | content |
+|---|---|
+| `scripts/00_restore_tmp.py` | stages the persisted analytic artifacts into `/tmp` |
+| `scripts/20–41` | CNEFE download and address matching (Greater São Paulo, Baixada Santista, rest of the state) |
+| `scripts/64`, `89` | place-vulnerability composite (income, illiteracy, crowding, favela) |
+| `scripts/78` | indirect age-standardisation engine (sensitivity analysis) |
+| `scripts/83` | regionalisation of census sectors into ~5,000-adult units |
+| `scripts/108`, `109` | geocoded cohort: spatial overlay and CNEFE-internal postal-code fallback |
+| `scripts/100_region_units.py` | region-level dataset: cases, population, crude and age-standardised rates, LTFU, vulnerability, hotspot flags |
+| `scripts/101–106`, `122–124` | main-text figures 1–5 |
+| `scripts/111–121`, `125`, `128–131` | Table 1, GLMM of LTFU, supplementary figures and tables, sensitivity analyses |
+| `scripts/107`, `110`, `113`, `116`, `118` | manuscript report, methods/results/supplement documents |
+| `scripts/rank_basis.py` | selects the rate basis for every ranking script (`RANK=crude`, the primary analysis; `RANK=std` age-standardised; `RANK=percap` LTFU per capita) |
+| `figure_regeneration_2026_09_09/` | final versions of Figures 2, 3 and 5 as submitted, with re-runnable numeric verification (see its `README.md`) |
+| `manuscript/PIPELINE.md` | reproduction order, full-rebuild table and STROBE flow |
+| `manuscript/methods.md` | methods text as implemented |
+| `docs/decisions/` | architecture decision records (unit of analysis, geocoding, regionalisation, vulnerability index, LTFU definition, crude rates as primary) |
+| `test/` | fast checks: compilation, `/tmp` dependency closure, artifact pins, privacy |
 
-- `02_download_shapefiles.py` — IBGE census tract shapefiles
-- `02b_download_historical_ibge.py` — historical IBGE boundaries
-- `02c_extract_mapbiomas.py` — MapBiomas land use
-- `08_download_2010_agsn.py` — 2010 subnormal agglomerate polygons
-- `08b_scrape_cem.py` — CEM São Paulo data
-- `08c_download_biblioteca_zip.py` — IBGE biblioteca archive
-
-### 3. Spatial join and cohort integration
-
-- `03_spatial_intersection.py` — point-in-polygon for census tracts
-- `05_spatial_intersection.py` — alternate intersection pass
-- `06_integrate_spatial_cohort.py` — attach spatial covariates to cohort
-- `07_spatial_visualizations.py` — choropleth / point maps
-
-### 4. Outcome-spatial analyses
-
-- `10_favela_incidence.py` — TB incidence within favelas (AGSNs)
-- `11_spatial_income_intersection.py` — income × spatial linkage
-- `13_income_incidence_abandonment.py` — income-incidence-abandonment joint analysis
-
-## Setup
+## Reproducing the analysis
 
 ```bash
-# Requires Python 3.10+ with geopandas stack
-pip install geopandas shapely fiona pyproj pandas numpy requests aiohttp
+pip install -r requirements.txt          # Python 3.10+
+python3 scripts/00_restore_tmp.py        # Data/analytic/* -> /tmp
+python3 scripts/100_region_units.py      # region-level dataset
+python3 scripts/101_fig1_concentration_region.py   # then 102 ... 106, 122, 123, 124 for the figures
+RANK=std python3 scripts/100_region_units.py       # age-standardised sensitivity analysis
+bash test/run_fast.sh                    # checks
 ```
 
-Edit `config.py` to point `BASE_PATH` at your local Google Drive mount if it
-differs from the default.
+The full rebuild from raw notifications (geocoding, regionalisation, vulnerability index) is
+documented step by step in `manuscript/PIPELINE.md`.
 
-## Manuscript figures (2026-09-09 regeneration)
+## Software
 
-`figure_regeneration_2026_09_09/` holds the corrected scripts for main-text figures 2, 3
-and 5, the verification scripts, and a provenance record of the numeric corrections applied
-in manuscript v13/v14 and appendix v12/v14. **Start with its `README.md`.**
+Python 3.10+ with pandas, numpy, geopandas, shapely, scipy, statsmodels, matplotlib, pygam,
+libpysal/esda/spreg (spatial autocorrelation), rapidfuzz (address matching) and python-docx
+(document assembly). Exact versions are in `requirements.txt`.
 
-Two defects in the earlier figure code are fixed there: panels 2d/3b/3c plotted the
-age-standardised rate columns while the text describes crude rates, and panels 2a/2b/5a
-ranked LTFU per capita rather than per evaluated episode. Do not reuse the older
-`build_fig*.py` scripts (Google Drive, `New_analyses/scripts/`) — see `SUPERSEDED.md` there.
+## License
 
-```
-figure_regeneration_2026_09_09/
-├── README.md              # provenance: what was wrong, what changed, what was verified
-├── scripts/               # corrected build_fig2/3/5.py + fig_common.py
-├── verification/          # re-runnable checks of every manuscript number
-└── manuscript_edits/      # scripts that produced the tracked-change .docx versions
-```
-
-Note: the analysis-pipeline scripts numbered 100–120 that generate the region units and the
-original figures live in the companion repo
-https://github.com/evelepka/SP-TB-spatial-analyses and are not mirrored here.
-
-## Related repos
-
-- Analysis pipeline (scripts 100–120, region units, original figures): https://github.com/evelepka/SP-TB-spatial-analyses
-- Outcomes analysis (ITT + causal g-methods): https://github.com/jasonandr/outcomes-after-tb-abandonment
+MIT (see `LICENSE`).

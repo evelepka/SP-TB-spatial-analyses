@@ -8,7 +8,7 @@ import pandas as pd, geopandas as gpd, numpy as np, os, matplotlib, matplotlib.p
 from matplotlib.colors import ListedColormap
 from venn import venn
 matplotlib.rcParams.update({"font.family":"sans-serif","font.size":10})
-SP="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
 GEO="/tmp/region_geom.gpkg"
 if os.path.exists(GEO):
     g=gpd.read_file(GEO)

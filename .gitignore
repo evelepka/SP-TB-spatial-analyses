@@ -49,10 +49,5 @@ output/
 # Logs
 *.log
 
-# ----------------------------------------------------------------------
-# Exceptions: aggregated outputs from GSP vulnerability typology work
-# Small CSVs aggregated to neighborhood/FCU level (no individual data)
-# kept for reproducibility of strategy discussion document.
-# ----------------------------------------------------------------------
-!outputs/aggregates/*.csv
-!docs/*.md
+# Exceptions
+!test/artifact_pins.json

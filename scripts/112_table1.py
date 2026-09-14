@@ -5,7 +5,7 @@ non-hotspot; plus favela regions (subset) and the State total. Per group: size, 
 rates, and the population-weighted vulnerability profile. Output: /tmp/table1.csv (+ prints).
 """
 import pandas as pd, geopandas as gpd, numpy as np, zipfile
-SP="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
 BAIXADA={"3506359","3513504","3518701","3522109","3531100","3537602","3541000","3548500","3551009"}
 BANDS=["V01034","V01035","V01036","V01037","V01038","V01039","V01040","V01041"]
 T=12

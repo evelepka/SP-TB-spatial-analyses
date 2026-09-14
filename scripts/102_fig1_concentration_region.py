@@ -9,8 +9,8 @@ import pandas as pd, numpy as np, re, os, matplotlib, matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from venn import venn
 np.random.seed(20240625); matplotlib.rcParams.update({"font.family":"sans-serif","font.size":11})
-SP="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data"
-BD="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/Abandonment Outcomes/Abandonment Paper/Banco de dados"
+SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
+BD="/DATA_ROOT/Abandonment Outcomes/Abandonment Paper/Banco de dados"
 # RANK BASIS (decision Jason 2026-08-11): regions are ranked by AGE-STANDARDIZED rate
 # (observed/expected, expectations E_inc/E_dr/E_ab from script 100 — indirect standardisation,
 # State reference) in the primary analysis; RANK=crude reproduces the crude ranking for the

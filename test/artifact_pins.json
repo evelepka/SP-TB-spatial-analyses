@@ -1,0 +1,23 @@
+{
+  "_purpose": "Golden pins for the persisted analytic artifacts (Data/analytic/). Exact-match on row counts and key tallies. A failure means the pipeline re-run CHANGED the cohort — that is the check working. If the change is intended (new data cut, new dedup rule), update the pin AND the STROBE figure (scripts/114_figS_strobe.py) AND manuscript/PIPELINE.md in the same commit, saying why.",
+  "_recorded": "2026-08-10, from the artifacts of 2026-07-07",
+  "rows": {
+    "geocoded_cohort.csv": 194817,
+    "region_cases.csv": 192161,
+    "region_units.csv": 7314,
+    "regions_sectors.csv": 92600
+  },
+  "region_cases_tallies": {
+    "death_sum": 9301,
+    "aband_sum": 21561,
+    "year_min": 2013,
+    "year_max": 2024
+  },
+  "strobe_analytic_n": 192161,
+  "ltfu_glmm": {
+    "_source": "Data/analytic/ltfu_glmm_summary.json (script 121; ADR-0005). MOR to 2dp.",
+    "m1_MOR_2dp": 1.65,
+    "m2_MOR_2dp": 1.63,
+    "n_episodes": 171024
+  }
+}

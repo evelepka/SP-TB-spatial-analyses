@@ -6,8 +6,7 @@ import pandas as pd
 from docx import Document
 from docx.shared import Pt
 
-REP=("/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/"
-     "My Drive/WHO modelling Project/SP-TB-spatial-analyses/Reports/SP_TB_Manuscript_Results.docx")
+REP=("/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Reports/SP_TB_Manuscript_Results.docx")
 t=pd.read_csv("/tmp/table1.csv").set_index("group")
 GROUPS=["Metropolitan — hotspot","Metropolitan — non-hotspot","Interior — hotspot",
         "Interior — non-hotspot","Favela regions (subset)","State total"]

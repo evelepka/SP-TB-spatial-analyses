@@ -6,7 +6,7 @@ import json
 import requests
 import geopandas as gpd
 
-SPATIAL = "/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SPATIAL = "/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
 DEST = f"{SPATIAL}/IBGE_2022_extended/CNEFE_GSP"
 os.makedirs(DEST, exist_ok=True)
 

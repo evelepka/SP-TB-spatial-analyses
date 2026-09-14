@@ -11,8 +11,7 @@ Requires: Rscript + lme4. Runtime ~4 min.
 """
 import pandas as pd, numpy as np, subprocess, json, os, sys
 
-SP = ("/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com"
-      "/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data")
+SP = ("/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data")
 cols = ['sinan_clean','age_tb','notification_date','case_type','case_outcome','address_type',
         'sex_std','alcoholism','drug_use','tobacco_use','hiv','diabetes','tx_administration_type']
 M = pd.read_csv(f"{SP}/cohort_with_spatial.csv", usecols=cols, low_memory=False, dtype={'sinan_clean':str})

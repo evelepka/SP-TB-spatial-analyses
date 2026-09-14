@@ -2,7 +2,7 @@
 import numpy as np, pandas as pd
 from scipy.stats import zscore, spearmanr
 
-AN = "/Users/jasonandrews/Library/CloudStorage/GoogleDrive-jasonandr@gmail.com/My Drive/SP-TB-spatial-analyses/Data/analytic"
+AN = "/DATA_ROOT/SP-TB-spatial-analyses/Data/analytic"
 reg = pd.read_csv(f"{AN}/region_units.csv", dtype={"region_id": str})
 co = pd.read_csv(f"{AN}/region_cases.csv", dtype={"region_id": str})
 

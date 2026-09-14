@@ -13,11 +13,8 @@ import pandas as pd
 import geopandas as gpd
 import requests
 
-SPATIAL = ("/Users/evelynlepkadelima/Library/CloudStorage/"
-           "GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/"
-           "SP-TB-spatial-analyses/Data")
-WHO_DATA = ("/Users/evelynlepkadelima/Library/CloudStorage/"
-            "GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/Data")
+SPATIAL = "/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
+WHO_DATA = "/DATA_ROOT/WHO modelling Project/Data"
 DEST = f"{SPATIAL}/IBGE_2022_extended/CNEFE_SP_outros"
 os.makedirs(DEST, exist_ok=True)
 

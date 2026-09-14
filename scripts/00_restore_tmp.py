@@ -7,8 +7,7 @@ find their inputs without re-running the costly CNEFE matching or regionalisatio
     python3 scripts/00_restore_tmp.py
 """
 import os, shutil
-AN=("/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/"
-    "My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data/analytic")
+AN=("/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data/analytic")
 FILES=["cohort_with_cnefe.csv","cohort_baixada_with_cnefe_v2.csv","cohort_sp_outros_with_cnefe.csv",
        "geocoded_cohort.csv","regions_sectors.csv","vuln_sectors.csv","vuln_final.csv",
        "region_units.csv","region_cases.csv","region_geom.gpkg","sp_muni_base.gpkg"]

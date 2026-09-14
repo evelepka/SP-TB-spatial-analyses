@@ -13,7 +13,7 @@ import os, pandas as pd, numpy as np, geopandas as gpd, shapely, matplotlib, mat
 from scipy.ndimage import gaussian_filter
 from matplotlib.colors import PowerNorm
 np.random.seed(20240703); matplotlib.rcParams.update({"font.family":"sans-serif","font.size":10})
-SP="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
 ZOOM_CONCURB=["São Paulo/SP","Baixada Santista/SP"]
 
 # ── episode → sector, aggregate per-sector outcome counts ──────────────────────

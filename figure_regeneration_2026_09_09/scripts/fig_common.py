@@ -10,8 +10,8 @@ REFLINE = "#444"
 GRIDCLR = "#e8e8e8"
 
 import os
-AN  = os.environ.get("SPTB_AN", "/Users/jasonandrews/Library/CloudStorage/GoogleDrive-jasonandr@gmail.com/My Drive/SP-TB-spatial-analyses/Data/analytic")
-OUT = os.environ.get("SPTB_OUT", "/Users/jasonandrews/Library/CloudStorage/GoogleDrive-jasonandr@gmail.com/My Drive/SP-TB-spatial-analyses/New_analyses/figure_regeneration_2026_09_09/figures")
+AN  = os.environ.get("SPTB_AN", "/DATA_ROOT/SP-TB-spatial-analyses/Data/analytic")
+OUT = os.environ.get("SPTB_OUT", "./figures")
 
 def set_style():
     plt.rcParams.update({

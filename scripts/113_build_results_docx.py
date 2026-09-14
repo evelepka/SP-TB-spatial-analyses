@@ -8,8 +8,7 @@ from docx.shared import Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.section import WD_ORIENT
 from docx.shared import Inches
-OUT=("/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/"
-     "My Drive/WHO modelling Project/SP-TB-spatial-analyses/Reports/SP_TB_Manuscript_Results.docx")
+OUT=("/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Reports/SP_TB_Manuscript_Results.docx")
 t=pd.read_csv("/tmp/table1.csv").set_index("group")
 GROUPS=["Metropolitan — hotspot","Metropolitan — non-hotspot","Interior — hotspot",
         "Interior — non-hotspot","Favela regions (subset)","State total"]

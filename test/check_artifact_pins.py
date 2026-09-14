@@ -12,8 +12,7 @@ import csv, json, re, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-AN = Path("/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com"
-          "/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data/analytic")
+AN = Path("/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data/analytic")
 
 pins = json.loads((ROOT / "test" / "artifact_pins.json").read_text())
 if not AN.is_dir():

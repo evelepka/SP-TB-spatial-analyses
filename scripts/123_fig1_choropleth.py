@@ -12,7 +12,7 @@ import pandas as pd, geopandas as gpd, numpy as np, matplotlib, matplotlib.pyplo
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 from matplotlib.cm import ScalarMappable
 matplotlib.rcParams.update({"font.family":"sans-serif","font.size":11})
-SP="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
 ZOOM_CONCURB=["São Paulo/SP","Baixada Santista/SP"]
 
 geo=gpd.read_file("/tmp/region_geom.gpkg").to_crs(31983)

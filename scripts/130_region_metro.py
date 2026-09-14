@@ -2,7 +2,7 @@
 majority of its census sectors — the same rule as Table 1 (script 112). Output: /tmp/region_metro.csv
 (region_id, metro). Used by 129 (Supplementary Figure S7) and ad-hoc metro-restricted analyses."""
 import pandas as pd, geopandas as gpd, numpy as np, zipfile
-SP="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
 BAIXADA={"3506359","3513504","3518701","3522109","3531100","3537602","3541000","3548500","3551009"}
 BANDS=["V01034","V01035","V01036","V01037","V01038","V01039","V01040","V01041"]
 sec=gpd.read_file(f"{SP}/SP_setores_2022/SP_setores_CD2022.shp")[["CD_SETOR","CD_MUN","CD_DIST","CD_TIPO","NM_CONCURB"]]

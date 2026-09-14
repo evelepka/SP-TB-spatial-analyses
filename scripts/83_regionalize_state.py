@@ -10,7 +10,7 @@ Output: /tmp/regions_sectors.csv  (CD_SETOR -> region_id) + composition summary.
 """
 import geopandas as gpd, pandas as pd, numpy as np, libpysal, warnings, time
 warnings.filterwarnings("ignore")
-SP="/Users/evelynlepkadelima/Library/CloudStorage/GoogleDrive-evelynlepka@gmail.com/My Drive/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
 import os
 FLOOR=int(os.environ.get("REGION_FLOOR",5000))   # sensitivity: override via env (3000 / 5000 / 8000)
 np.random.seed(20240625)
