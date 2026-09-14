@@ -1,5 +1,5 @@
-# Independent region effect on LTFU, adjusted for individual case-mix (Evelyn 2026-08-11).
-# Data: /tmp/ltfu_glmm_data.csv (built by the python prep in this session; evaluated episodes,
+# Independent region effect on LTFU, adjusted for individual case-mix.
+# Data: /tmp/ltfu_glmm_data.csv (built by scripts/121_ltfu_region_glmm.py; evaluated episodes,
 # same filter as the paper). Three nested logistic mixed models, random intercept per region:
 #   m0: age only                     -> baseline geographic variation
 #   m1: + sex, alcohol, drugs, tobacco, diabetes, HIV, period   (case mix)
