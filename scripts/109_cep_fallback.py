@@ -9,7 +9,7 @@ Universe = every person in the CNEFE-matched files (unrestricted; episode/case s
 Input: /tmp/geocoded_cohort.csv (Phase 1)   Output: overwrites it with T5 rows appended (+ persist).
 """
 import pandas as pd, numpy as np, os
-SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SP="/DATA_ROOT/Data"
 def cclean(x):
     if pd.isna(x): return None
     s=''.join(ch for ch in str(x) if ch.isdigit()); return s.zfill(8)[:8] if s else None

@@ -1,6 +1,5 @@
 {
   "_purpose": "Golden pins for the persisted analytic artifacts (Data/analytic/). Exact-match on row counts and key tallies. A failure means a pipeline re-run changed the cohort. If the change is intended, update the pin, the STROBE figure (scripts/114_figS_strobe.py) and manuscript/PIPELINE.md together.",
-  "_recorded": "2026-08-10, from the artifacts of 2026-07-07",
   "rows": {
     "geocoded_cohort.csv": 194817,
     "region_cases.csv": 192161,

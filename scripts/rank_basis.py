@@ -1,12 +1,12 @@
-"""Single switch for the rate basis used to RANK regions and DISPLAY rates (ADR-0006, 2026-09-05).
+"""Single switch for the rate basis used to RANK regions and DISPLAY rates (see docs/decisions/0006).
 
 RANK=crude  (default) primary analysis: incidence/mortality per adult population, LTFU as the
                        crude proportion of evaluated episodes. Output files unsuffixed.
 RANK=std               age-standardized (observed/expected, indirect, State reference; LTFU age-
-                       adjusted proportion) — the pre-2026-09 primary, now the sensitivity analysis.
+                       adjusted proportion) — sensitivity analysis.
                        Output files suffixed _std.
-RANK=percap            LTFU as events per capita (historical basis) — kept only to
-                       regenerate the historical figure on request. Suffix _percap.
+RANK=percap            LTFU as events per adult population (supplementary sensitivity analysis) — kept to
+                       regenerate that supplementary figure. Suffix _percap.
 
 Import:  from rank_basis import RANK, SUF, RATE, RATE_LABEL, rank_base
 """

@@ -1,5 +1,5 @@
-"""Manuscript Figure 1 (regionalisation), ALL DE-NOISED (split-sample cross-fit; the naive-vs-
-de-noised comparison is Supplementary Figure S1, script 111). (a) De-noised concentration curves of
+"""Concentration panels (used in the Figure 2 composite, script 122), ALL DE-NOISED (split-sample cross-fit; the naive-vs-
+de-noised comparison is Supplementary Figure S2, script 111). (a) De-noised concentration curves of
 the three outcomes (TB incidence, TB mortality, loss to follow-up) — cumulative events vs
 cumulative adult population, highest-rate regions first so the curves fall above the diagonal;
 de-noised Gini in the legend. (b) De-noised % of events in the 5 / 10 / 20 / 40% of the population
@@ -9,12 +9,8 @@ import pandas as pd, numpy as np, re, os, matplotlib, matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from venn import venn
 np.random.seed(20240625); matplotlib.rcParams.update({"font.family":"sans-serif","font.size":11})
-SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
-BD="/DATA_ROOT/Abandonment Outcomes/Abandonment Paper/Banco de dados"
-# RANK BASIS: regions are ranked on the basis chosen in rank_basis.py (crude by default, ADR-0006)
-# (observed/expected, expectations E_inc/E_dr/E_ab from script 100 — indirect standardisation,
-# State reference) in the primary analysis; RANK=crude reproduces the crude ranking for the
-# supplementary robustness figure. Events accumulated are always ACTUAL events.
+# Regions are ranked on the basis chosen in rank_basis.py (crude by default; RANK=std gives the
+# age-standardised sensitivity version). Accumulated events are always observed events.
 import sys; sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from rank_basis import RANK,SUF,rank_base
 reg=pd.read_csv("/tmp/region_units.csv",dtype={"region_id":str})[["region_id","pop","ne","E_inc","E_dr","E_ab"]]

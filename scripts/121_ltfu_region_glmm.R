@@ -20,13 +20,13 @@ fit <- function(f, lab) {
       lab, s2, sqrt(s2), exp(1.349 * sqrt(s2)), s2 / (s2 + pi^2 / 3)))
   m
 }
-m0 <- fit(aband ~ ageband + (1 | region_id), "m0 idade")
+m0 <- fit(aband ~ ageband + (1 | region_id), "m0 age")
 m1 <- fit(aband ~ ageband + sex_std + alcoholism + drug_use + tobacco_use + diabetes +
                  hivc + period + (1 | region_id), "m1 case-mix")
 m2 <- fit(aband ~ ageband + sex_std + alcoholism + drug_use + tobacco_use + diabetes +
                  hivc + period + dot + (1 | region_id), "m2 +DOT")
 
-cat("\nORs ajustados (m2):\n")
+cat("\nAdjusted ORs (m2):\n")
 co <- summary(m2)$coefficients
 or <- exp(co[, 1]); lo <- exp(co[, 1] - 1.96 * co[, 2]); hi <- exp(co[, 1] + 1.96 * co[, 2])
 for (i in 2:nrow(co)) cat(sprintf("  %-22s OR %.2f (%.2f-%.2f)\n", rownames(co)[i], or[i], lo[i], hi[i]))

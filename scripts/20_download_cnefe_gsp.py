@@ -1,4 +1,4 @@
-"""Download CNEFE GeoJSON para os 37 municípios da GSP."""
+"""Download CNEFE 2022 GeoJSON files for the 37 municipalities of Greater São Paulo (GSP)."""
 
 import os
 import time
@@ -6,15 +6,15 @@ import json
 import requests
 import geopandas as gpd
 
-SPATIAL = "/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SPATIAL = "/DATA_ROOT/Data"
 DEST = f"{SPATIAL}/IBGE_2022_extended/CNEFE_GSP"
 os.makedirs(DEST, exist_ok=True)
 
-# Lista 37 municípios GSP
+# The 37 GSP municipalities
 sec = gpd.read_file(f"{SPATIAL}/SP_setores_2022/SP_setores_CD2022.shp")
 sec["CD_MUN"] = sec["CD_MUN"].astype(str)
 gsp_munis = sec[sec["NM_CONCURB"] == "São Paulo/SP"][["CD_MUN", "NM_MUN"]].drop_duplicates()
-print(f"GSP: {len(gsp_munis)} municípios")
+print(f"GSP: {len(gsp_munis)} municipalities")
 
 BASE = ("https://ftp.ibge.gov.br/Cadastro_Nacional_de_Enderecos_para_Fins_Estatisticos/"
         "Censo_Demografico_2022/Arquivos_CNEFE/GeoJSON/Municipio_20240910/"
@@ -29,7 +29,7 @@ for i, row in enumerate(gsp_munis.itertuples(), 1):
     if os.path.exists(fname) and os.path.getsize(fname) > 1000:
         size = os.path.getsize(fname)
         total_size += size
-        print(f"[{i:2d}/{len(gsp_munis)}] ✓ {nm_mun:<30} ({size/1e6:.1f} MB) [já baixado]")
+        print(f"[{i:2d}/{len(gsp_munis)}] ✓ {nm_mun:<30} ({size/1e6:.1f} MB) [already downloaded]")
         continue
 
     url = BASE.format(cd_mun=cd_mun)
@@ -49,4 +49,4 @@ for i, row in enumerate(gsp_munis.itertuples(), 1):
     except Exception as e:
         print(f"[{i:2d}/{len(gsp_munis)}] ✗ {nm_mun:<30} ERR: {e}")
 
-print(f"\nFINAL: {total_size/1e6:.0f} MB em {(time.time()-t0)/60:.1f} min")
+print(f"\nFINAL: {total_size/1e6:.0f} MB in {(time.time()-t0)/60:.1f} min")

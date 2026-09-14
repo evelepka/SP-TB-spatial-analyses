@@ -1,9 +1,7 @@
-"""Manuscript Figure 1 — CHOROPLETH of the analysis regionalisation (replaces the kernel-smoothed
-surfaces; show the outcomes the analysis uses,
-on the units the analysis uses).
+"""Manuscript Figure 1 — choropleth of the three outcomes on the analysis regions.
 
-2x3 panels: columns = notified TB incidence (age-std), TB mortality (age-std), LTFU (age-adjusted
-% of evaluated episodes, ADR-0005); row 1 = whole state, row 2 = metropolitan zoom (Greater São
+2x3 panels: columns = notification rate, TB mortality rate, LTFU (% of evaluated episodes);
+crude by default, age-standardised under RANK=std; row 1 = whole state, row 2 = metropolitan zoom (Greater São
 Paulo + Baixada Santista). Regions below the reporting threshold (<10 cases / <10 evaluated) are
 grey — the suppression rule made visible. Colour scales capped at the 98th percentile of eligible
 regions. Reads /tmp/region_units.csv + /tmp/region_geom.gpkg. Output: /tmp/fig1_choropleth.png
@@ -12,7 +10,7 @@ import pandas as pd, geopandas as gpd, numpy as np, matplotlib, matplotlib.pyplo
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 from matplotlib.cm import ScalarMappable
 matplotlib.rcParams.update({"font.family":"sans-serif","font.size":11})
-SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SP="/DATA_ROOT/Data"
 ZOOM_CONCURB=["São Paulo/SP","Baixada Santista/SP"]
 
 geo=gpd.read_file("/tmp/region_geom.gpkg").to_crs(31983)
@@ -22,7 +20,6 @@ from rank_basis import RANK,SUF,RATE,RATE_LABEL
 g=geo.merge(ru[["region_id",RATE["inc"],RATE["mort"],RATE["aband"]]],on="region_id",how="left")
 
 # metropolitan municipality outlines, dissolved per municipality (cached)
-import os
 CACHE="/tmp/sp_zoom_munis_dissolved.gpkg"
 if os.path.exists(CACHE):
     mun=gpd.read_file(CACHE)
@@ -53,7 +50,7 @@ for j,(col,lab,cx) in enumerate(PANELS):
         ax.set_axis_off()
         ax.set_title(f"({letters[i*3+j]})",loc="left",fontsize=13,fontweight="bold")
         if i==0: ax.text(0.5,1.05,lab,transform=ax.transAxes,ha="center",fontsize=10.5)
-    # colorbar horizontal sob a coluna
+    # horizontal colorbar under the column
     sm=ScalarMappable(norm=norm,cmap=cmap)
     pos=axes[1,j].get_position()
     cax=fig.add_axes([pos.x0+pos.width*0.12,pos.y0-0.055,pos.width*0.76,0.014])
@@ -62,7 +59,8 @@ for j,(col,lab,cx) in enumerate(PANELS):
     cb.set_label(f"capped at 98th percentile ({vmax:.0f})",fontsize=8)
 fig.text(0.5,-0.035,"Grey: regions below the reporting threshold (<10 cases, 2013–2024). Bottom row: Greater São Paulo and Baixada Santista, with municipal boundaries.",
          ha="center",fontsize=9,color="#555")
-plt.savefig(f"/tmp/fig1_choropleth{SUF}.png",dpi=300,bbox_inches="tight"); plt.savefig(f"/tmp/fig1_choropleth{SUF}.pdf",bbox_inches="tight",dpi=400)   # polygons rasterised at 400 dpi, text stays vector; plt.close()
+plt.savefig(f"/tmp/fig1_choropleth{SUF}.png",dpi=300,bbox_inches="tight"); plt.savefig(f"/tmp/fig1_choropleth{SUF}.pdf",bbox_inches="tight",dpi=400)   # polygons rasterised at 400 dpi, text stays vector
+plt.close()
 n_el=ru[RATE["inc"]].notna().sum()
 print(f"regions: {len(ru):,} | coloured (eligible): {n_el:,} | grey: {len(ru)-n_el:,}")
 print(f"Saved /tmp/fig1_choropleth{SUF}.png")

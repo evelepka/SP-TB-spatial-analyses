@@ -13,8 +13,8 @@ import pandas as pd
 import geopandas as gpd
 from collections import defaultdict
 
-SPATIAL = "/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
-WHO_DATA = "/DATA_ROOT/WHO modelling Project/Data"
+SPATIAL = "/DATA_ROOT/Data"
+WHO_DATA = "/DATA_ROOT/TBWeb"
 CNEFE_DIR = f"{SPATIAL}/IBGE_2022_extended/CNEFE_GSP"
 INDEX_DIR = f"{CNEFE_DIR}/indices"
 os.makedirs(INDEX_DIR, exist_ok=True)
@@ -58,8 +58,8 @@ def to_sinan(x, width=11):
         return None
 
 
-# ========== 1) Processa cada município → CSV pequeno por município ==========
-print("Fase 1: processar cada CNEFE por município → salvar índices CSV pequenos")
+# ========== 1) Build one small index CSV per municipality ==========
+print("Phase 1: building per-municipality CNEFE indices")
 t0 = time.time()
 files = sorted([f for f in os.listdir(CNEFE_DIR) if f.endswith(".zip")])
 muni_index_paths = {}
@@ -71,7 +71,7 @@ for i, fname in enumerate(files, 1):
     out_path = f"{INDEX_DIR}/idx_{cd_mun}.csv"
     if os.path.exists(out_path) and os.path.getsize(out_path) > 100:
         muni_index_paths[cd_mun] = out_path
-        # Skip — já processado
+        # already processed
         continue
 
     with zipfile.ZipFile(fpath) as z:
@@ -79,7 +79,7 @@ for i, fname in enumerate(files, 1):
         with z.open(inner) as f:
             data = json.load(f)
 
-    # Acumula dicionário por (rua, num)
+    # Accumulate by (street, number)
     by_key = defaultdict(lambda: {"bairros": [], "setores": [], "lats": [], "lons": []})
     for feat in data.get("features", []):
         props = feat.get("properties", {})
@@ -98,10 +98,11 @@ for i, fname in enumerate(files, 1):
         bairro = props.get("DSC_LOCALIDADE")
         setor = props.get("COD_SETOR")
         coords = feat.get("geometry", {}).get("coordinates", [None, None])
-        lon, lat = coords[0], coords[1] if len(coords) > 1 else None
+        lon = coords[0] if coords else None
+        lat = coords[1] if len(coords) > 1 else None
         if not bairro:
             continue
-        # Key composta: (rua, num) - num pode ser None (fica como -1)
+        # Composite key (street, number); missing number stored as -1
         key = (rua_n, num_n if num_n else -1)
         by_key[key]["bairros"].append(bairro)
         by_key[key]["setores"].append(setor)
@@ -110,7 +111,7 @@ for i, fname in enumerate(files, 1):
         if lon is not None:
             by_key[key]["lons"].append(lon)
 
-    # Reduz: mode/median por key
+    # Reduce: mode/median per key
     from collections import Counter
     import statistics
     rows = []
@@ -124,13 +125,13 @@ for i, fname in enumerate(files, 1):
     df = pd.DataFrame(rows, columns=["rua", "num", "bairro", "setor", "lat", "lon", "n"])
     df.to_csv(out_path, index=False)
     muni_index_paths[cd_mun] = out_path
-    print(f"  [{i:2d}/{len(files)}] {cd_mun} → {len(df):,} entradas únicas  "
+    print(f"  [{i:2d}/{len(files)}] {cd_mun} → {len(df):,} unique entries  "
           f"({(time.time()-t0)/60:.1f} min total)", flush=True)
 
-print(f"\nFase 1 OK: {len(muni_index_paths)} índices municipais salvos em {(time.time()-t0)/60:.1f} min")
+print(f"\nPhase 1 done: {len(muni_index_paths)} municipal indices saved in {(time.time()-t0)/60:.1f} min")
 
-# ========== 2) Carrega cohort + faz matching município por município ==========
-print("\nFase 2: carregar cohort + matching...")
+# ========== 2) Load cohort and match municipality by municipality ==========
+print("\nPhase 2: loading cohort and matching...")
 sec22 = gpd.read_file(f"{SPATIAL}/SP_setores_2022/SP_setores_CD2022.shp")
 sec22["CD_MUN"] = sec22["CD_MUN"].astype(str)
 cd_muns_gsp = set(sec22[sec22["NM_CONCURB"] == "São Paulo/SP"]["CD_MUN"].unique())
@@ -165,17 +166,17 @@ print(f"  Cohort GSP 2013-2024: {len(work):,}")
 work["rua_norm"] = work["endereco"].apply(normalize_street)
 work["num_norm"] = work["numEnd"].apply(normalize_num)
 
-# Match município por município
-print("\nMatching por município...")
+# Match per municipality
+print("\nMatching per municipality...")
 result_cols = ["bairro_cnefe", "setor_cnefe", "lat_cnefe", "lon_cnefe", "cnefe_match"]
 for c in result_cols:
     work[c] = None
 
 for cd_mun, path in muni_index_paths.items():
     idx_df = pd.read_csv(path)
-    # Dicionário (rua, num) → tudo
+    # (street, number) -> record
     by_key = {(r.rua, r.num): r for r in idx_df.itertuples(index=False)}
-    # Dicionário (rua) → fallback: pega o mais frequente (n máximo)
+    # street-only fallback: most frequent entry
     by_rua = (idx_df.sort_values("n", ascending=False)
                     .drop_duplicates("rua")
                     .set_index("rua").to_dict(orient="index"))
@@ -197,7 +198,7 @@ for cd_mun, path in muni_index_paths.items():
             work.at[idx, "lon_cnefe"] = r.lon
             work.at[idx, "cnefe_match"] = "exact_rua_num"
             n_exact += 1
-        # Tier 2: fallback (só rua)
+        # Tier 2: street-only fallback
         elif rua in by_rua:
             r = by_rua[rua]
             work.at[idx, "bairro_cnefe"] = r["bairro"]
@@ -209,33 +210,33 @@ for cd_mun, path in muni_index_paths.items():
         else:
             work.at[idx, "cnefe_match"] = "no_match"
 
-# Resultados
+# Results
 total = len(work)
 n_match_exact = (work["cnefe_match"] == "exact_rua_num").sum()
 n_match_fb = (work["cnefe_match"] == "fallback_rua").sum()
 n_no = (work["cnefe_match"] == "no_match").sum()
 
-print(f"\n=== RESULTADOS CNEFE MATCHING ===")
+print(f"\n=== CNEFE MATCHING RESULTS ===")
 print(f"Total cohort GSP: {total:,}")
 print(f"  exact_rua_num: {n_match_exact:,} ({n_match_exact/total*100:.1f}%)")
 print(f"  fallback_rua:  {n_match_fb:,} ({n_match_fb/total*100:.1f}%)")
 print(f"  no_match:      {n_no:,} ({n_no/total*100:.1f}%)")
-print(f"\n→ Cobertura CNEFE total: {(n_match_exact+n_match_fb)/total*100:.1f}%")
+print(f"\n-> Total CNEFE coverage: {(n_match_exact+n_match_fb)/total*100:.1f}%")
 
-# Concordância bairro_cnefe vs bairro TBweb
+# Neighbourhood concordance, CNEFE vs TBWeb
 matched = work[work["cnefe_match"] != "no_match"].copy()
 both = matched[matched["bairro_cnefe"].notna() & matched["bairro"].notna()].copy()
 both["b_cnefe_n"] = both["bairro_cnefe"].apply(norm_text)
 both["b_tb_n"] = both["bairro"].apply(norm_text)
 
 n_match_b = (both["b_cnefe_n"] == both["b_tb_n"]).sum()
-print(f"\nConcordância bairro_cnefe vs bairro TBweb (n={len(both):,}):")
-print(f"  Match exato: {n_match_b:,} ({n_match_b/len(both)*100:.1f}%)")
+print(f"\nNeighbourhood concordance CNEFE vs TBWeb (n={len(both):,}):")
+print(f"  Exact match: {n_match_b:,} ({n_match_b/len(both)*100:.1f}%)")
 
-# Salva
+# Save
 out_cols = ["sinan_clean", "cd_mun", "munResid", "endereco", "numEnd",
             "bairro", "rua_norm", "num_norm",
             "bairro_cnefe", "setor_cnefe", "lat_cnefe", "lon_cnefe", "cnefe_match"]
 work[out_cols].to_csv("/tmp/cohort_with_cnefe.csv", index=False)
-print(f"\nSalvo: /tmp/cohort_with_cnefe.csv ({len(work):,} linhas)")
-print(f"\nTempo total: {(time.time()-t0)/60:.1f} min")
+print(f"\nSaved: /tmp/cohort_with_cnefe.csv ({len(work):,} rows)")
+print(f"\nTotal time: {(time.time()-t0)/60:.1f} min")

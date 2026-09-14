@@ -1,4 +1,4 @@
-"""Manuscript Figure 5 (temporal stability, regionalisation) — 2x2 panels, all outcomes unless noted:
+"""Temporal-stability panels (Figure 5; composite in script 122, regionalisation) — 2x2 panels, all outcomes unless noted:
 (a) de-noised concentration (% of events in the top 20% of population) per 3-year period;
 (b) hotspot Jaccard between consecutive periods; (c) rank autocorrelation across period lags;
 (d) ALLUVIAL — regions ranked into INCIDENCE quintiles each 3-year period; ribbons coloured by the
@@ -27,7 +27,6 @@ co["ri"]=co["region_id"].map(idx); co=co.dropna(subset=["ri"]); co["ri"]=co["ri"
 PERIODS=[(2013,2015),(2016,2018),(2019,2021),(2022,2024)]
 PLAB=["2013–15","2016–18","2019–21","2022–24"]
 OUTC=[("inc",None,"#1a3d5c","Notifications"),("mort","death","#7a0177","Mortality"),("aband","aband","#1f6f8b","LTFU")]
-EXPC={"inc":"E_inc","mort":"E_dr","aband":"E_ab"}
 def rank_base(ln): return _rb(reg,ln,popv)
 
 def ri_of(period,coln):

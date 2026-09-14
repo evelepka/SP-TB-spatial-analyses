@@ -1,11 +1,11 @@
 """Reproduce the LTFU concentration series for figure 5a under both definitions:
-   (i) per capita  -> LTFU events / adult population   (what build_fig5.py plots)
-   (ii) per evaluated episode -> LTFU / evaluated      (what the manuscript describes)
+   (i) per capita  -> LTFU events / adult population   (supplement only)
+   (ii) per evaluated episode -> LTFU / evaluated      (primary basis, what build_fig5.py plots)
 Also reproduce the pooled top-20% shares reported in the Results.
 """
 import numpy as np, pandas as pd
 
-AN = "/DATA_ROOT/SP-TB-spatial-analyses/Data/analytic"
+AN = "/DATA_ROOT/Data/analytic"
 reg = pd.read_csv(f"{AN}/region_units.csv", dtype={"region_id": str})[["region_id", "pop", "n"]]
 reg = reg[reg["pop"] > 0]
 co = pd.read_csv(f"{AN}/region_cases.csv", dtype={"region_id": str})
@@ -70,11 +70,11 @@ def share_proportion(sub, B=150, q=0.20):
 print("MANUSCRIPT fig5a: notifications 43-44%, mortality 38->33%, LTFU 37->26%")
 print("MANUSCRIPT pooled: notif 45%, mortality 39%, LTFU 24% (per episode), 42% Gini per capita\n")
 
-print("--- per-period, LTFU PER CAPITA (current build_fig5.py) ---")
+print("--- per-period, LTFU per capita (supplementary basis) ---")
 pc = [share_percap(co[(co.year.between(*p)) & (co["aband"] == 1)]["ri"].values) for p in PERIODS]
 print("  LTFU per capita      :", [round(x) for x in pc])
 
-print("--- per-period, LTFU PER EVALUATED EPISODE (manuscript definition) ---")
+print("--- per-period, LTFU PER EVALUATED EPISODE (primary basis) ---")
 pe = [share_proportion(co[co.year.between(*p)]) for p in PERIODS]
 print("  LTFU per episode     :", [round(x) for x in pe])
 

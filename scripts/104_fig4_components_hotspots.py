@@ -1,8 +1,8 @@
-"""Manuscript Figure 4 (regionalisation): association between vulnerability-index COMPONENTS
+"""Cohen's d panel (Figure 3a; composite in script 124) (regionalisation): association between vulnerability-index COMPONENTS
 (income, % favela, illiteracy, residents/household — all oriented so higher = more deprived)
 and the three hotspot types (incidence, mortality, loss to follow-up). Metric = standardized mean
 difference (Cohen's d) of each component between hotspot and non-hotspot eligible regions.
-TWO layout options (option A used): A) grouped by component, B) grouped by hotspot type.
+Bars grouped by component.
 Reads /tmp/region_units.csv. Output: /tmp/fig4_components_hotspots.png
 """
 import pandas as pd, numpy as np, matplotlib, matplotlib.pyplot as plt

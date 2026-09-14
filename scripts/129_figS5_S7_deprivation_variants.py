@@ -1,6 +1,6 @@
-"""Supplementary Figures S5–S7 on the primary (crude) rate basis (ADR-0006, 2026-09-05).
+"""Supplementary Figures S5–S7 on the primary (crude) rate basis (ADR-0006).
 
-Replaces the legacy V1 PNGs that were carried without a generator (116 header, 2026-08-11):
+Produces:
   S5  LTFU (% of evaluated episodes) by quintile of (a) household-income deprivation and
       (b) the composite vulnerability index, region-cluster bootstrap 95% CI.
   S6  Incidence and mortality by quintile of household income (a,b) and of the composite

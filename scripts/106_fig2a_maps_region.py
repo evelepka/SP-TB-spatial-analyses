@@ -1,4 +1,4 @@
-"""Manuscript Figure 2 (regionalisation), COMBINED 2x2 (2x2 layout):
+"""Manuscript Figure 2 (regionalisation), combined 2x2 layout:
 (a) TB-incidence, (b) TB-mortality, (c) treatment-loss to follow-up hotspot maps at the metropolitan
 scale (Greater SP + Baixada) — hotspot regions (top 20% of the adult population) solid-coloured,
 the rest grey — and (d) a 4-set Venn of the top-20% hotspot overlap (incidence, mortality,
@@ -8,7 +8,7 @@ import pandas as pd, geopandas as gpd, numpy as np, os, matplotlib, matplotlib.p
 from matplotlib.colors import ListedColormap
 from venn import venn
 matplotlib.rcParams.update({"font.family":"sans-serif","font.size":10})
-SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SP="/DATA_ROOT/Data"
 GEO="/tmp/region_geom.gpkg"
 if os.path.exists(GEO):
     g=gpd.read_file(GEO)
@@ -40,6 +40,6 @@ L={"Incidence":set(d[d["hs_inc"]]["region_id"]),"Mortality":set(d[d["hs_mort"]][
 venn(L,ax=axf[3],fontsize=9,legend_loc="upper left",cmap=ListedColormap(["#1a3d5c","#7a0177","#1f6f8b","#b8860b"]))
 alln=len(L["Incidence"]&L["Mortality"]&L["Loss to follow-up"]&L["Vulnerability"])
 axf[3].set_title(f"d) Overlap of top-20% hotspot regions\n(four lenses · {alln} in all four)",fontsize=12,fontweight="bold",color="#0d2b45")
-fig.suptitle("Figure 2. Hotspot regions by outcome and their overlap — Greater São Paulo + Baixada Santista (regionalisation, age-standardised, 2013–2024)",fontsize=12.5,fontweight="bold")
+fig.suptitle("Hotspot regions by outcome and their overlap — Greater São Paulo + Baixada Santista (regionalisation, 2013–2024)",fontsize=12.5,fontweight="bold")
 plt.tight_layout(rect=[0,0,1,0.98]); plt.savefig("/tmp/fig2_combined_region.png",dpi=150,bbox_inches="tight"); plt.close()
 print("Saved /tmp/fig2_combined_region.png  | all-4 overlap:",alln)

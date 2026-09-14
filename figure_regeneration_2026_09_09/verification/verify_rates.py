@@ -1,6 +1,6 @@
 import numpy as np, pandas as pd
 
-AN = "/DATA_ROOT/SP-TB-spatial-analyses/Data/analytic"
+AN = "/DATA_ROOT/Data/analytic"
 reg = pd.read_csv(f"{AN}/region_units.csv", dtype={"region_id": str})
 T = 12
 rng = np.random.default_rng(20260718)
@@ -33,7 +33,7 @@ def paf_ci(df, col, by, ascending, B=400):
 
 ge10 = reg[reg["n"] >= 10]
 
-print("MANUSCRIPT CLAIMS: fig2d 65% (63-67), ~119,700 excess cases")
+print("MANUSCRIPT CLAIMS: fig2d 65% (64-68), ~119,700 excess cases")
 print("                   fig3b 34% (30-39), ~62,600 excess cases; gradient 33 -> 69")
 print("                   fig3c 28% (22-34), ~2,500 excess deaths;  gradient 1.8 -> 3.1")
 print()

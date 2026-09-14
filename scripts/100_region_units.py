@@ -1,14 +1,14 @@
-"""Foundation for the regionalisation-based MANUSCRIPT: per-REGION dataset with age-
-standardised outcomes (incidence, TB-mortality rate, abandonment, TB-mortality %, case-
+"""Foundation for the regionalisation-based MANUSCRIPT: per-REGION dataset with crude and
+age-standardised outcomes (incidence, TB-mortality rate, abandonment, TB-mortality %, case-
 fatality), the place-vulnerability composite, the individual vulnerability components
 (income, % favela, illiteracy, residents/household — no population density, ADR-0004), and top-20%
 hotspot flags by lens. Unit = REGIONALISATION (region_id, /tmp/regions_sectors.csv); the
 ADR-0003. Age-standardisation engine reused from
 script 78 (indirect, SP internal reference). Output: /tmp/region_units.csv
 """
-import pandas as pd, geopandas as gpd, numpy as np, zipfile, re
-SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
-BD="/DATA_ROOT/Abandonment Outcomes/Abandonment Paper/Banco de dados"
+import os, pandas as pd, geopandas as gpd, numpy as np, zipfile, re
+SP="/DATA_ROOT/Data"
+BD="/DATA_ROOT/SIM"
 T=12; BANDS=["V01034","V01035","V01036","V01037","V01038","V01039","V01040","V01041"]
 EDGES=[15,20,25,30,40,50,60,70,200]
 def ns(x):
@@ -51,7 +51,7 @@ M["year"]=pd.to_datetime(M["notification_date"],errors="coerce").dt.year
 # retreatments of the same episode are NOT incident cases and are excluded.
 epi=M[(M["age_tb"]>=15)&M["year"].between(2013,2024)
       &(M["address_type"]=="ENDERECO PADRAO")&M["case_type"].isin(["Novo","Recidiva"])].copy()
-epi=epi.drop_duplicates(["sinan_clean","case_type","year"])   # drop the ~200 same-episode duplicate entries
+epi=epi.drop_duplicates(["sinan_clean","case_type","year"])   # drop same-episode duplicate notification records (n=185)
 oc=epi["case_outcome"]                                        # per-EPISODE treatment outcome
 epi["aband"]=oc.isin(["Abandono","Abandono Primario"]).astype(int)
 epi["eval"]=oc.isin(["Cura","Abandono","Abandono Primario","Obito TB","Obito NTB","Falencia/Resistencia"]).astype(int)
@@ -69,8 +69,7 @@ co["age"]=co["age_tb"]; co["ab"]=pd.cut(co["age"],EDGES,right=False,labels=BANDS
 # authoritative CASE-LEVEL analytic table (episode-level; region assigned) — the single source for all figures
 _rc=co[["sinan_clean","region_id","year","age","tier","death","aband","eval"]].copy()
 _rc.to_csv("/tmp/region_cases.csv",index=False)
-import os as _os
-_AN0=f"{SP.rsplit('/Data',1)[0]}/Data/analytic"; _os.makedirs(_AN0,exist_ok=True)
+_AN0=f"{SP.rsplit('/Data',1)[0]}/Data/analytic"; os.makedirs(_AN0,exist_ok=True)
 _rc.to_csv(f"{_AN0}/region_cases.csv",index=False)
 
 # state age-specific reference (internal standard) + indirect standardisation (same as script 78)
@@ -126,13 +125,12 @@ def hs(col,need_eval=False):
     cum=e["pop"].cumsum(); m=cum<=tot*0.20
     if m.sum()<len(e): m.iloc[m.sum()]=True
     return set(e[m]["region_id"])
-import os,sys; sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+import sys; sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from rank_basis import RANK,RATE
 print(f"hotspot flags on RANK={RANK} basis: {RATE}")
 for lens,col,ne in [("inc",RATE["inc"],False),("mort",RATE["mort"],False),("aband",RATE["aband"],True),("cfr","cfr",True),("vuln","vuln",False)]:
     sel=hs(col,ne); d[f"hs_{lens}"]=d["region_id"].isin(sel)
 d.to_csv("/tmp/region_units.csv",index=False)
-import os
 _AN=f"{SP.rsplit('/Data',1)[0]}/Data/analytic"; os.makedirs(_AN,exist_ok=True)
 if RANK=="crude": d.to_csv(f"{_AN}/region_units.csv",index=False)   # persist the PRIMARY basis only (survives /tmp wipe)
 print(f"\nregions: {len(d):,} | eligible (n>=10): {(d['n']>=10).sum():,}")

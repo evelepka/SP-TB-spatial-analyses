@@ -1,9 +1,7 @@
 """Age standardisation of all geospatial TB metrics (sensitivity analysis): incidence,
 abandonment (LTFU), and TB mortality, per geographic unit, adjusted for the age
 structure of each place. TB mortality is reported with BOTH denominators:
-a RATE per population (deaths/100k/yr) and a PROPORTION of ALL notified cases
-(deaths/notified, not restricted to evaluated/in-treatment cases — the older CFR is
-dropped). The TB-death marker is the integrated TBWeb 'Óbito TB' OR SIM TB (A15-A19,
+a rate per population (deaths/100k/yr) and a proportion of notified cases. The TB-death marker is the integrated TBWeb 'Óbito TB' OR SIM TB (A15-A19,
 any certificate line), capturing deaths before and/or after treatment.
 
 Method — INDIRECT standardisation (appropriate for small areas; stable where some units
@@ -13,14 +11,16 @@ of 1.0 = "as expected for this place's age structure".
   Incidence:   SIR = O/E,  E = Σ_a pop_a·T·state_inc_a   → age-adj rate = SIR·state_crude_inc
   Abandonment: O/E among evaluated cases, expected from state age-specific abandonment
   Case-fatality: O/E among evaluated cases, expected from state age-specific CFR
+This script runs on the exploratory district/neighbourhood units; the same engine is applied
+to the regionalisation in 100_region_units.py, which is the version used in the manuscript.
 Outputs: /tmp/unit_age_standardised.csv  and  /tmp/fig_age_standardisation.png
 """
 import pandas as pd, geopandas as gpd, numpy as np, zipfile, re
 import matplotlib, matplotlib.pyplot as plt
 from scipy.stats import spearmanr
 matplotlib.rcParams.update({"font.family":"sans-serif","font.size":11})
-SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
-BD="/DATA_ROOT/Abandonment Outcomes/Abandonment Paper/Banco de dados"
+SP="/DATA_ROOT/Data"
+BD="/DATA_ROOT/SIM"
 CAPITAL,FCU_MIN,T="3550308",5000,12   # 2013-2024 = 12 years
 BANDS=["V01034","V01035","V01036","V01037","V01038","V01039","V01040","V01041"]
 EDGES=[15,20,25,30,40,50,60,70,200]   # bin edges for cohort age -> 8 bands

@@ -1,12 +1,12 @@
 #!/bin/bash
-# run_fast.sh — the FAST tier: one entry point, seconds. Plumbing, not science.
+# run_fast.sh — fast checks: compilation, /tmp dependency closure, artifact pins, privacy.
 #
 # One command that checks the pipeline plumbing, the pinned cohort numbers and the privacy rule.
 #
 #   bash test/run_fast.sh            # all
 #   bash test/run_fast.sh --list     # names only
 #
-# The artifact-pin check needs the Google Drive analytic store mounted; it SKIPs cleanly
+# The artifact-pin check needs the analytic data folder (Data/analytic/) to be present; it SKIPs cleanly
 # when it is not (exit 3 from the checker).
 set -uo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
@@ -14,9 +14,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 PASS=0; FAIL=0; SKIP=0; XFAIL=0; FAILED_NAMES=()
 START=$(date +%s)
 
-# KNOWN FAILURES — real debt, deliberately not hidden. A known failure does not fail the run
-# but is printed every time; a NEW failure fails the run; a known failure that starts PASSING
-# also fails the run, so this list cannot rot. Each entry says what fixing it requires.
+# Known failures (none at present). A known failure is reported but does not fail the run;
+# a known failure that starts passing fails the run so the list stays current.
 KNOWN_FAIL=()
 
 # NOTE: macOS ships bash 3.2, where "${arr[@]}" on an EMPTY array trips `set -u`.
@@ -40,7 +39,7 @@ run() {                     # run <name> <command...>
       printf "  %-34s PASS  %3ds\n" "$name" "$dt"; PASS=$((PASS+1))
     fi
   elif is_known "$name"; then
-    printf "  %-34s XFAIL %3ds  (known debt)\n" "$name" "$dt"; XFAIL=$((XFAIL+1))
+    printf "  %-34s XFAIL %3ds  (known failure)\n" "$name" "$dt"; XFAIL=$((XFAIL+1))
   else
     printf "  %-34s FAIL  %3ds\n" "$name" "$dt"; FAIL=$((FAIL+1)); FAILED_NAMES+=("$name")
     echo "$out" | tail -12 | sed 's/^/        | /'
@@ -72,8 +71,7 @@ echo
 DT=$(( $(date +%s) - START ))
 echo "──────────────────────────────────────────────────────────────"
 printf "PASS %d   FAIL %d   XFAIL %d   SKIP %d   in %ds\n" "$PASS" "$FAIL" "$XFAIL" "$SKIP" "$DT"
-[ "$XFAIL" -gt 0 ] && echo "known debt (see KNOWN_FAIL in this script): ${KNOWN_FAIL[*]:-}"
-[ "$DT" -gt 60 ] && echo "WARNING: over the 60s budget — gate something slow behind a --full flag."
+[ "$XFAIL" -gt 0 ] && echo "known failures: ${KNOWN_FAIL[*]:-}"
 if [ "$FAIL" -gt 0 ]; then
   echo "failed: ${FAILED_NAMES[*]:-}"
   exit 1

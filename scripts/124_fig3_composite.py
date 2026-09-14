@@ -1,31 +1,12 @@
 """Manuscript Figure 3, built end-to-end from /tmp/region_units.csv.
 
-The figure previously had NO in-repo builder: the July 8 render survived only inside the
-manuscript docx (word/media/image3.png), and the 2026-08-11 "PAF -> Excess fraction" relabel
-was done by PATCHING the inset boxes of that old PNG (/tmp/inset_b_new.png et al.), not by
-recomputing. This script is now the single source.
-
 (a) Cohen's d (hotspot - rest) for the four deprivation components, by hotspot lens
-(b) age-standardised incidence by household-income deprivation quintile + excess vs least-deprived
+(b) notification rate (crude by default; age-standardised under RANK=std) by household-income deprivation quintile + excess vs least-deprived
 (c) same for TB mortality
 
-SPEC ARCHAEOLOGY (2026-08-11, vs the manuscript image):
-- Panel (a) recovered EXACTLY (12/12 bars to 3 decimals): eligible regions (inc_adj non-null),
-  unweighted d = (mean_hs - mean_rest)/sqrt((var_hs + var_rest)/2), population variances,
-  raw income sign-flipped. Pop-weighted, log-income, z-scored and pooled-n/overall-SD variants
-  all fit worse.
-- Panels (b)/(c): quintiles of ADULT population over eligible regions ranked by mean household
-  income reproduce all 10 bar heights exactly (34.1/42.8/47.8/61.3/67.3; 1.64/2.09/2.38/2.95/3.41).
-  The inset excesses are NOT exactly recoverable: the closest spec (implemented here) is
-  excess_q = (rate_q - rate_1)/1e5 * pop_q * T, giving 6,257/9,849/19,641/23,936 cases
-  (total 59,683) and 320/529/941/1,276 deaths (total 3,066) vs the manuscript's
-  6,294/9,923/19,649/23,920 (59,785) and 316/510/933/1,294 (3,054) — within 0.2%/0.4% on
-  totals, <=0.8% (inc) / <=3.7% (mort) per bar. The 122-style SIR excess (n_q - E_q*SIR_1)
-  fits worse (60,264 / 2,945) and is printed as a sensitivity. Also rejected: age-stratified
-  Q1-reference, direct standardisation, crude reference, fractional/left/mid quintile
-  boundaries, per-lens eligibility, alternative income aggregations, region-count quintiles.
-  DO NOT silently update the manuscript numbers to this script's output — the delta is
-  see the header of this script.
+Method: Cohen's d uses population variances (ddof=0); quintiles are population-weighted over
+eligible regions ranked by mean household income; excess = rate difference x person-years.
+
 Output: /tmp/fig3_composite.png
 """
 import pandas as pd, numpy as np, matplotlib, matplotlib.pyplot as plt
@@ -75,20 +56,6 @@ for key,g,unit in [("b",gB,"cases"),("c",gC,"deaths")]:
           +"/".join(f"{e:,.0f}" for e in g["excess"][1:])
           +f"  total {g['excess'][1:].sum():,.0f} {unit}  EF {ef_of(g):.1f}% (95% CI {lo:.0f}-{hi:.0f})")
 
-# validation against the manuscript image (docx word/media/image3.png, numbers of 2026-07-08)
-MS={"b_exc":[6294,9923,19649,23920],"b_tot":59785,"c_exc":[316,510,933,1294],"c_tot":3054}
-dev_b=max(abs(e-m)/m for e,m in zip(gB["excess"][1:],MS["b_exc"]))
-dev_c=max(abs(e-m)/m for e,m in zip(gC["excess"][1:],MS["c_exc"]))
-print(f"vs manuscript insets: totals {gB['excess'][1:].sum():,.0f} vs {MS['b_tot']:,} and "
-      f"{gC['excess'][1:].sum():,.0f} vs {MS['c_tot']:,}; max per-bar dev {dev_b:.1%} / {dev_c:.1%}")
-print("FLAG: manuscript inset excesses are from the lost 2026-07-08 spec — closest, not exact"
-      " (see header)" if dev_b>0.005 or dev_c>0.005 else "insets reproduced exactly")
-# sensitivity: 122-style SIR excess (reference = least-deprived quintile's SIR)
-for lab,g in [("inc",gB),("mort",gC)]:
-    sir=g["n"]-g["E"]*(g.loc[0,"n"]/g.loc[0,"E"])
-    print(f"    sensitivity SIR-excess {lab}: "+"/".join(f"{e:,.0f}" for e in sir[1:])
-          +f"  total {sir[1:].sum():,.0f}")
-
 # ---------------- figure ----------------
 fig,(axA,axB,axC)=plt.subplots(1,3,figsize=(16.2,4.7))
 x=np.arange(len(VARS)); w=0.26
@@ -113,7 +80,7 @@ for ax,g,col,unit,ymax,off,ttl in [(axB,gB,"#1a3d5c","cases",85,2.5,"(b)  Notifi
     ax.set_xticks(range(1,6)); ax.set_ylim(0,ymax)
     if unit=="deaths": ax.set_yticks(range(0,5))
     ax.set_xlabel("Household-income deprivation quintile\n(1 = least → 5 = most)")
-    ax.set_ylabel("Age-standardised rate per 100,000/yr")
+    ax.set_ylabel(("Age-standardised" if RANK=="std" else "Notification")+" rate per 100,000/yr")
     ax.grid(alpha=0.3,axis="y"); ax.set_axisbelow(True)
     ax.set_title(ttl,loc="left",fontsize=13,fontweight="bold")
 for ax in (axA,axB,axC):

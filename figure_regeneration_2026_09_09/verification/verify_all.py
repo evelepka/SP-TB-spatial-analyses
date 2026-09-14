@@ -2,7 +2,7 @@
 import numpy as np, pandas as pd
 from scipy.stats import zscore, spearmanr
 
-AN = "/DATA_ROOT/SP-TB-spatial-analyses/Data/analytic"
+AN = "/DATA_ROOT/Data/analytic"
 reg = pd.read_csv(f"{AN}/region_units.csv", dtype={"region_id": str})
 co = pd.read_csv(f"{AN}/region_cases.csv", dtype={"region_id": str})
 
@@ -88,4 +88,4 @@ chk("least deprived (Q1) LTFU %", 12.3, round(g.loc[1,"pct"],1))
 
 print("\n=== SPEARMAN: region LTFU vs vulnerability ===")
 rr = reg[reg["n"]>=10].dropna(subset=["ltfu_crude","vuln"])
-chk("Spearman rho LTFU-vuln (crude proxy)", 0.01, round(spearmanr(rr["ltfu_crude"], rr["vuln"]).statistic,2), 0.12)
+chk("Spearman rho, region LTFU proportion vs vulnerability", 0.01, round(spearmanr(rr["ltfu_crude"], rr["vuln"]).statistic,2), 0.12)

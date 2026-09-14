@@ -13,8 +13,8 @@ import pandas as pd
 import geopandas as gpd
 import requests
 
-SPATIAL = "/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
-WHO_DATA = "/DATA_ROOT/WHO modelling Project/Data"
+SPATIAL = "/DATA_ROOT/Data"
+WHO_DATA = "/DATA_ROOT/TBWeb"
 DEST = f"{SPATIAL}/IBGE_2022_extended/CNEFE_SP_outros"
 os.makedirs(DEST, exist_ok=True)
 
@@ -53,7 +53,7 @@ all_munis = sec[["CD_MUN", "NM_MUN"]].drop_duplicates()
 GSP_SET = set(sec[sec["NM_CONCURB"] == "São Paulo/SP"]["CD_MUN"].unique())
 sp_outros_df = all_munis[~all_munis["CD_MUN"].isin(GSP_SET | BAIXADA)]
 sp_outros_set = set(sp_outros_df["CD_MUN"])
-print(f"SP outros: {len(sp_outros_set)} municípios (excl. {len(GSP_SET)} GSP + {len(BAIXADA)} Baixada)")
+print(f"SP outros: {len(sp_outros_set)} municipalities (excluding {len(GSP_SET)} GSP + {len(BAIXADA)} Baixada)")
 
 # ── 2. Filter cohort to find case-bearing municipalities ──────────────────────
 print("Loading cohort to find case-bearing municipalities...")

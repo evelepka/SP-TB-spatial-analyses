@@ -1,8 +1,8 @@
 """Composite Figure 5 (1x3): temporal stability + out-of-sample usefulness.
 (a) de-noised concentration (% of events in top 20% of population) per 3-year period
-(b) out-of-sample hotspot prediction: hotspots frozen on old data vs best-possible ceiling
+(b) out-of-sample hotspot prediction: hotspots defined on earlier periods vs the within-period maximum
 (c) alluvial of incidence-quintile transitions across the four periods
-Computation reused from manuscript script 105 (a, c) and new-analysis script 123 (b).
+Panels (a) and (c) follow scripts/105_fig3_temporal_region.py; panel (b) is implemented here.
 """
 import os, numpy as np, pandas as pd, matplotlib
 matplotlib.use("Agg")
@@ -156,7 +156,7 @@ a.legend(fontsize=9.5, title="Outcome", title_fontsize=9.5); a.grid(alpha=0.35, 
 a.spines[["top", "right"]].set_visible(False)
 a.set_title("(a)", loc="left", fontsize=13, fontweight="bold")
 
-# (b) out-of-sample prediction bars (no descriptive title)
+# (b) out-of-sample prediction bars
 b = AX[1]; x = np.arange(len(RES)); w = 0.36
 capR = [r["capR"] * 100 for r in RES]; capC = [r["capC"] * 100 for r in RES]
 b.bar(x - w / 2, capR, w, color=INC, label="Hotspots from old data", zorder=3)
@@ -179,5 +179,6 @@ c = AX[2]; draw_alluvial(c)
 _pos = c.get_position()
 fig.text(_pos.x0 - 0.008, _pos.y1 + 0.015, "(c)", fontsize=13, fontweight="bold", va="bottom", ha="left")
 
+fig.savefig(f"{OUT}/Figure5_temporal_oos.pdf", bbox_inches="tight", facecolor="white")
 fig.savefig(f"{OUT}/Figure5_temporal_oos.png", dpi=300, bbox_inches="tight", facecolor="white")
 print(f"saved {OUT}/Figure5_temporal_oos.png")

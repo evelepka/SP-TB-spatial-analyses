@@ -1,13 +1,13 @@
 """De-noised concentration of LTFU as a proportion of evaluated episodes, crude and
 age-standardised, using one consistent implementation.
 
-Age standardisation follows the appendix: indirect standardisation against the state
+Age standardisation follows the supplementary methods (indirect, state-internal reference): indirect standardisation against the state
 population as internal reference, eight adult age bands, LTFU expressed as the
 age-adjusted proportion of evaluated episodes (observed/expected x crude state proportion).
 """
 import numpy as np, pandas as pd
 
-AN = "/DATA_ROOT/SP-TB-spatial-analyses/Data/analytic"
+AN = "/DATA_ROOT/Data/analytic"
 reg = pd.read_csv(f"{AN}/region_units.csv", dtype={"region_id": str})
 co = pd.read_csv(f"{AN}/region_cases.csv", dtype={"region_id": str})
 pv = reg.set_index("region_id")["pop"]
@@ -68,8 +68,7 @@ print()
 for mode, label in [("crude", "crude"), ("agestd", "age-standardised")]:
     c = curve(mode)
     top20 = np.interp(0.20, GRID, c) * 100
-    gini = 2 * np.trapezoid(c, GRID) - 1
+    gini = 2 * np.trapz(c, GRID) - 1
     print(f"  {label:17s}: top-20% share {top20:5.2f}%   Gini {gini:.3f}"
           f"   -> reported as {top20:.0f}% / {gini:.2f}")
 print()
-print("  earlier draft values for comparison: 24% crude (Gini 0.23), 22% age-standardised (Gini 0.21)")

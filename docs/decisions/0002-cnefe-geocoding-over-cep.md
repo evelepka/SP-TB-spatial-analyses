@@ -13,5 +13,5 @@ T4 neighbourhood centroid; T5 postal-code centroid (fallback only,
 `scripts/109_cep_fallback.py`).
 
 ## Consequences
-More than 99% of episodes are geocoded to a residential census sector. T5 episodes are kept
+Of 200,107 unique incident episodes, 192,161 (96%) are geocoded to a residential region. T5 episodes are kept
 in the primary analysis, with a sensitivity analysis excluding them.

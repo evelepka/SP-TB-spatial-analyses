@@ -9,7 +9,7 @@ not part of the contiguous urban agglomeration), so we hardcode CD_MUN here.
 
 import os, time, requests
 
-SPATIAL = "/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SPATIAL = "/DATA_ROOT/Data"
 DEST = f"{SPATIAL}/IBGE_2022_extended/CNEFE_Baixada"
 os.makedirs(DEST, exist_ok=True)
 
@@ -36,7 +36,7 @@ for i, (cd_mun, nm_mun) in enumerate(BAIXADA, 1):
     if os.path.exists(fname) and os.path.getsize(fname) > 1000:
         size = os.path.getsize(fname)
         total_size += size
-        print(f"[{i}/9] ✓ {nm_mun:<15} ({size/1e6:.1f} MB) [já baixado]")
+        print(f"[{i}/9] ✓ {nm_mun:<15} ({size/1e6:.1f} MB) [already downloaded]")
         continue
 
     url = BASE.format(cd_mun=cd_mun)
@@ -56,4 +56,4 @@ for i, (cd_mun, nm_mun) in enumerate(BAIXADA, 1):
     except Exception as e:
         print(f"[{i}/9] ✗ {nm_mun:<15} ERR: {e}")
 
-print(f"\nFINAL: {total_size/1e6:.0f} MB em {(time.time()-t0)/60:.1f} min")
+print(f"\nFINAL: {total_size/1e6:.0f} MB in {(time.time()-t0)/60:.1f} min")

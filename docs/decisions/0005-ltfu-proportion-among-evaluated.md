@@ -5,7 +5,7 @@ Two LTFU measures are possible: LTFU events per adult population (per capita) an
 proportion of LTFU among episodes with an evaluated outcome. Per-capita LTFU is the most
 geographically concentrated outcome (Gini about 0.42, about half of events in the top 20% of
 the population) because it inherits the concentration of notifications. The proportion among
-evaluated episodes is the least concentrated (Gini about 0.2) and is the measure of programme
+evaluated episodes is the least concentrated (Gini 0.25) and is the measure of programme
 retention.
 
 ## Decision

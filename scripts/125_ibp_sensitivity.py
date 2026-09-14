@@ -1,12 +1,12 @@
-"""IBP (CIDACS) sensitivity and concordance (JC review comments, 2026-08-04; approved 2026-08-11).
+"""IBP (CIDACS) sensitivity and concordance.
 
 Builds an index on the domains of the Brazilian Deprivation Index (IBP: income, education,
 sanitation) from the 2022 Census sector data, then reports:
  (1) construct-validity concordance (Spearman, sector level): composite x IPVS, composite x
-     IBP-style, IBP-style x IPVS  [reference values: 0.76 / 0.92 / 0.72]
+     IBP-style, IBP-style x IPVS
  (2) robustness of the hotspot-deprivation divergence (region-level Cohen's d, hotspot vs rest)
-     under composite vs IBP-style index  [targets: +0.44/+0.24/-0.06 vs +0.21/+0.07/-0.11]
- (3) sanitation coverage in SP  [targets: 95.5% adequate; 87% of pop in sectors <=5% inadequate]
+     under composite vs IBP-style index
+ (3) sanitation coverage in SP
 Output: /tmp/ibp_sensitivity.json (read by 116 for Supplementary Table S8).
 """
 import pandas as pd, numpy as np, geopandas as gpd, json
@@ -46,14 +46,14 @@ for lens, lab in [("hs_inc", "incidence"), ("hs_mort", "mortality"), ("hs_aband"
     hs = d[d[lens].astype(bool)]; rest = d[~d[lens].astype(bool)]
     D[lab] = {"composite": round(cohend(hs["vuln"], rest["vuln"]), 2),
               "ibp": round(cohend(hs["ibp"], rest["ibp"]), 2)}
-    print(f"(2) {lab:10s} d composto={D[lab]['composite']:+.2f}  d IBP={D[lab]['ibp']:+.2f}")
+    print(f"(2) {lab:10s} d composite={D[lab]['composite']:+.2f}  d IBP={D[lab]['ibp']:+.2f}")
 
 # (3) sanitation coverage (population-weighted; d_sanit = share with inadequate sanitation)
 wpop = s["pop15"].fillna(0)
 inad = float(np.average(s["d_sanit"].fillna(0), weights=wpop))
 le5 = float(wpop[s["d_sanit"] <= 0.05].sum() / wpop.sum())
 le10 = float(wpop[s["d_sanit"] <= 0.10].sum() / wpop.sum())
-print(f"(3) saneamento adequado {100*(1-inad):.1f}% | pop em setores <=5% inadequado {le5*100:.0f}% | <=10% {le10*100:.0f}%")
+print(f"(3) adequate sanitation {100*(1-inad):.1f}% | population in sectors with <=5% inadequate {le5*100:.0f}% | <=10% {le10*100:.0f}%")
 
 json.dump({"n_sectors": len(m), "rho_comp_ipvs": round(r_cv, 2), "rho_comp_ibp": round(r_ci, 2),
            "rho_ibp_ipvs": round(r_iv, 2), "cohend": D,

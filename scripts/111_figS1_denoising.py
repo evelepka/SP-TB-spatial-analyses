@@ -1,4 +1,4 @@
-"""Supplementary Figure S1 (regionalisation): the de-noising bias correction. For each outcome,
+"""Supplementary Figure S2 (regionalisation): the de-noising bias correction. For each outcome,
 the NAIVE concentration (dashed) overstates the true clustering — most for the rarer events
 (TB mortality, loss to follow-up) — because finite-sample noise inflates the naive Gini/share;
 the split-sample cross-fit de-noised estimate (solid) removes that bias. This justifies reporting
@@ -40,4 +40,4 @@ h=[Line2D([0],[0],color=c,lw=2.5,marker="o",label=l) for l,_,c,_ in LENS]
 h+=[Line2D([0],[0],color="#888",lw=2.5,ls="-",label="de-noised (cross-fit)"),Line2D([0],[0],color="#888",lw=1.6,ls="--",label="naïve (uncorrected)")]
 ax.legend(handles=h,fontsize=9,loc="upper left")
 plt.tight_layout(); plt.savefig(f"/tmp/figS1_denoising{SUF}.png",dpi=300,bbox_inches="tight"); plt.close()
-print("Saved /tmp/figS1_denoising.png")
+print(f"Saved /tmp/figS1_denoising{SUF}.png")

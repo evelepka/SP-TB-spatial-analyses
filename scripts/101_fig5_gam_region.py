@@ -1,7 +1,7 @@
 """Manuscript Figure 5 (regionalisation): scatter + population-weighted GAM, rows = vulnerability
 indicators (household income, % favela, adult illiteracy, residents/household — NO density),
-cols = TB indicators (incidence [log-y], TB-mortality rate, loss to follow-up %). Regions (>=10 cases),
-age-standardised outcomes. Reads /tmp/region_units.csv. Output: /tmp/fig5_gam_region.png
+cols = TB indicators (incidence [log-y], TB-mortality rate, loss to follow-up %). Regions (>=10 cases);
+rate basis set by rank_basis.py (crude by default). Reads /tmp/region_units.csv. Output: /tmp/fig5_gam_region.png
 """
 import pandas as pd, numpy as np, matplotlib, matplotlib.pyplot as plt
 from pygam import LinearGAM, s

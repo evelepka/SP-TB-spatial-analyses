@@ -1,4 +1,4 @@
-"""Supplementary Figure S4 — spatial structure of the three outcomes (replaces the legacy V1 PNG).
+"""Supplementary Figure S4 — spatial structure of the three outcomes.
 
 (a) Global Moran's I (queen contiguity, row-standardised weights, 999 permutations) on
     log region-level rates, unadjusted and on the residuals of a regression on the

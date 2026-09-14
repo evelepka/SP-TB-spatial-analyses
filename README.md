@@ -26,10 +26,19 @@ index built from census indicators.
 
 Scripts refer to the project data folder with the placeholder `/DATA_ROOT`. Before running,
 replace it with the location of your data folder (for example with
-`sed -i '' 's#/DATA_ROOT#/path/to/data#' scripts/*.py`). Expensive intermediates are staged in
-`/tmp` and restored from `Data/analytic/` by `scripts/00_restore_tmp.py`. The figure scripts in
-`figure_regeneration_2026_09_09/` read the `SPTB_AN` (analytic folder) and `SPTB_OUT` (output
-folder) environment variables instead.
+`sed -i '' 's#/DATA_ROOT#/path/to/data#' scripts/*.py test/*.py figure_regeneration_2026_09_09/*/*.py`). The expected layout is:
+
+| folder | content |
+|---|---|
+| `/DATA_ROOT/TBWeb/` | notification register extracts (restricted) |
+| `/DATA_ROOT/SIM/` | mortality-register linkage (restricted) |
+| `/DATA_ROOT/Data/` | census 2022 aggregates, sector boundaries, CNEFE downloads, geocoding outputs |
+| `/DATA_ROOT/Data/analytic/` | persisted intermediates restored to `/tmp` by `scripts/00_restore_tmp.py` |
+| `/DATA_ROOT/Figures/`, `Reports/`, `Supplementary_material/` | outputs |
+
+The figure scripts in `figure_regeneration_2026_09_09/scripts/` read the `SPTB_AN` (analytic
+folder) and `SPTB_OUT` (output folder) environment variables; the verification scripts there use
+the `/DATA_ROOT` placeholder.
 
 ## Repository layout
 
@@ -43,12 +52,10 @@ folder) environment variables instead.
 | `scripts/108`, `109` | geocoded cohort: spatial overlay and CNEFE-internal postal-code fallback |
 | `scripts/100_region_units.py` | region-level dataset: cases, population, crude and age-standardised rates, LTFU, vulnerability, hotspot flags |
 | `scripts/101–106`, `122–124` | main-text figures 1–5 |
-| `scripts/111–121`, `125`, `128–131` | Table 1, GLMM of LTFU, supplementary figures and tables, sensitivity analyses |
-| `scripts/107`, `110`, `113`, `116`, `118` | manuscript report, methods/results/supplement documents |
+| `scripts/111–116`, `121`, `125`, `129–131` | Table 1, mixed-effects model of LTFU, supplementary figures and tables, sensitivity analyses |
 | `scripts/rank_basis.py` | selects the rate basis for every ranking script (`RANK=crude`, the primary analysis; `RANK=std` age-standardised; `RANK=percap` LTFU per capita) |
 | `figure_regeneration_2026_09_09/` | final versions of Figures 2, 3 and 5 as submitted, with re-runnable numeric verification (see its `README.md`) |
 | `manuscript/PIPELINE.md` | reproduction order, full-rebuild table and STROBE flow |
-| `manuscript/methods.md` | methods text as implemented |
 | `docs/decisions/` | architecture decision records (unit of analysis, geocoding, regionalisation, vulnerability index, LTFU definition, crude rates as primary) |
 | `test/` | fast checks: compilation, `/tmp` dependency closure, artifact pins, privacy |
 
@@ -58,8 +65,9 @@ folder) environment variables instead.
 pip install -r requirements.txt          # Python 3.10+
 python3 scripts/00_restore_tmp.py        # Data/analytic/* -> /tmp
 python3 scripts/100_region_units.py      # region-level dataset
-python3 scripts/101_fig1_concentration_region.py   # then 102 ... 106, 122, 123, 124 for the figures
+python3 scripts/102_fig1_concentration_region.py   # then 101, 103–106, 122, 123, 124 for the figures
 RANK=std python3 scripts/100_region_units.py       # age-standardised sensitivity analysis
+python3 scripts/116_build_supplementary_docx.py    # supplementary document
 bash test/run_fast.sh                    # checks
 ```
 

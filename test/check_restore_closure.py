@@ -20,8 +20,8 @@ restored = set(re.findall(r'"([^"]+)"', m.group(1))) if m else set()
 TMP_RE = re.compile(r'/tmp/([A-Za-z0-9_.\-]+\.(?:csv|gpkg|json|parquet))')
 WRITE_METHOD = re.compile(r'\.(to_csv|to_file|to_json|to_parquet)\s*\(')
 
-# Scope: the MANUSCRIPT pipeline (00_restore + the 100-series). Exploratory scripts (< 100)
-# may read ad-hoc /tmp extractions; only the pipeline is under a reproducibility contract.
+# Scope: 00_restore_tmp.py and the 100-series (the scripts that read the persisted intermediates).
+# The < 100 scripts build those intermediates from raw inputs; see manuscript/PIPELINE.md.
 PIPELINE = [SCRIPTS / "00_restore_tmp.py"] + sorted(SCRIPTS.glob("1[0-9][0-9]_*.py"))
 
 # R companions (e.g. 121_ltfu_region_glmm.R) write /tmp files via write.csv — count those as produced

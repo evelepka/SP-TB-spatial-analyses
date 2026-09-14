@@ -21,8 +21,8 @@ import pandas as pd
 import geopandas as gpd
 from rapidfuzz import fuzz, process
 
-SPATIAL = "/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
-WHO_DATA = "/DATA_ROOT/WHO modelling Project/Data"
+SPATIAL = "/DATA_ROOT/Data"
+WHO_DATA = "/DATA_ROOT/TBWeb"
 CNEFE_DIR = f"{SPATIAL}/IBGE_2022_extended/CNEFE_SP_outros"
 INDEX_DIR = f"{CNEFE_DIR}/indices"
 os.makedirs(INDEX_DIR, exist_ok=True)
@@ -37,7 +37,6 @@ TYPO_MAP = {
     "SARAYVA": "SARAIVA",
     "DEALBUQUERQUE": "DE ALBUQUERQUE",
     "BRUZARROSCO": "BRUZZAROSCO",
-    "SAMBAIATUBA": "SAMBAIATUBA",
     "CACHETAS": "CACHETA",
 }
 
@@ -239,7 +238,7 @@ mun_to_cd = sec22.drop_duplicates("CD_MUN").set_index(
     sec22.drop_duplicates("CD_MUN")["NM_MUN"].apply(norm_text)
 )["CD_MUN"]
 
-print("Loading cohort + endereços...")
+print("Loading cohort + addresses...")
 cohort = pd.read_csv(
     f"{SPATIAL}/cohort_with_spatial.csv",
     usecols=["sinan_clean", "sinan_padded", "address_type", "case_type", "notification_date"],
@@ -462,6 +461,3 @@ print(f"\nSaved: /tmp/cohort_sp_outros_with_cnefe.csv ({len(work):,} rows)")
 print(f"Total matching time: {(time.time()-t_match)/60:.1f} min")
 print(f"Total script time:   {(time.time()-t0)/60:.1f} min")
 
-# Preview
-print("\nFirst 5 rows:")
-print(work[out_cols].head().to_string())

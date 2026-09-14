@@ -1,8 +1,8 @@
-"""IMPROVED CNEFE matching for Baixada Santista.
+"""CNEFE address matching for the Baixada Santista (four-tier cascade).
 
-Improvements over 29:
+Compared with the Greater São Paulo matcher (21_cnefe_match_cohort.py), this version adds:
   1. Strip complement tokens (BLOCO, APTO, QUADRA, LOTE, KM, CASA, PROX) before normalize
-  2. Extract embedded number if numEnd is missing (e.g. 'R FULANO 73' → rua='FULANO', num=73)
+  2. Extract embedded number if numEnd is missing (e.g. 'R EXAMPLE 73' -> street='EXAMPLE', number=73)
   3. Normalize numbered/ordinal street prefixes (1A, 10A, etc.)
   4. Tier 3: fuzzy match within município via rapidfuzz (token_set_ratio >= 88)
   5. Tier 4: bairro_cnefe fallback (assign centroid sector when rua is FAVELA/COMUNIDADE)
@@ -17,8 +17,8 @@ from collections import defaultdict, Counter
 import statistics
 from rapidfuzz import fuzz, process
 
-SPATIAL = "/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
-WHO_DATA = "/DATA_ROOT/WHO modelling Project/Data"
+SPATIAL = "/DATA_ROOT/Data"
+WHO_DATA = "/DATA_ROOT/TBWeb"
 CNEFE_DIR = f"{SPATIAL}/IBGE_2022_extended/CNEFE_Baixada"
 INDEX_DIR = f"{CNEFE_DIR}/indices"
 
@@ -31,7 +31,6 @@ TYPO_MAP = {
     "SARAYVA": "SARAIVA",
     "DEALBUQUERQUE": "DE ALBUQUERQUE",
     "BRUZARROSCO": "BRUZZAROSCO",
-    "SAMBAIATUBA": "SAMBAIATUBA",
     "CACHETAS": "CACHETA",
 }
 
@@ -147,7 +146,7 @@ for f in sorted(os.listdir(CNEFE_DIR)):
     if f.endswith(".zip"):
         cd_mun = f.split("_")[1]
         muni_index_paths[cd_mun] = f"{INDEX_DIR}/idx_{cd_mun}.csv"
-print(f"  {len(muni_index_paths)} índices CNEFE")
+print(f"  {len(muni_index_paths)} CNEFE indices")
 
 # Build per-município lookup structures
 print("Building lookup structures (exact, by-rua, by-bairro centroid)...")
@@ -174,10 +173,10 @@ for cd_mun, path in muni_index_paths.items():
         "by_bairro": by_bairro,
         "bairro_norm_map": bairro_norm_map,
     }
-print(f"  {len(mun_data)} municípios prontos")
+print(f"  {len(mun_data)} municipalities ready")
 
 # ========== Load cohort ==========
-print("\nLoading cohort + endereços...")
+print("\nLoading cohort + addresses...")
 cohort = pd.read_csv(f"{SPATIAL}/cohort_with_spatial.csv",
                      usecols=["sinan_clean", "sinan_padded", "address_type", "case_type",
                               "cep", "notification_date"],
@@ -312,7 +311,7 @@ for cd_mun, mdata in mun_data.items():
         n_no += 1
 
     elapsed = time.time() - t0
-    print(f"  {cd_mun}: {len(sub):,} casos processados ({elapsed/60:.1f} min total)", flush=True)
+    print(f"  {cd_mun}: {len(sub):,} cases processed ({elapsed/60:.1f} min total)", flush=True)
 
 # Results
 total = len(work)

@@ -8,7 +8,7 @@ Reproduction order for the manuscript analysis. Scripts read and write intermedi
 ```
 python3 scripts/00_restore_tmp.py      # Data/analytic/* -> /tmp
 python3 scripts/100_region_units.py    # region-level dataset from the geocoded cohort
-# figures: 101 102 103 104 105 106 122 123 124 ; report: 107
+# figures: 101 102 103 104 105 106 122 123 124
 ```
 
 ## Full rebuild from raw notifications
@@ -26,12 +26,11 @@ python3 scripts/100_region_units.py    # region-level dataset from the geocoded 
 | main figures | `101`–`106` | `fig1..fig5*.png` | |
 | composite figures | `122_manuscript_composites.py`, `123_fig1_choropleth.py`, `124_fig3_composite.py` | Figures 1, 2, 3 and 5 as laid out in the manuscript | |
 | metropolitan flag | `130_region_metro.py` | `region_metro.csv` | used by 129 |
-| Table 1 | `112_table1.py`, `118_table1_into_doc.py` | | |
+| Table 1 | `112_table1.py` | `table1.csv` | |
 | LTFU model | `121_ltfu_region_glmm.py` | `ltfu_glmm_summary.json` | mixed-effects logistic model of LTFU with a region random effect |
-| supplementary S1–S7 | `114_figS_strobe.py`, `111_`, `115_`, `129_figS5_S7_deprivation_variants.py`, `131_figS4_spatial_structure.py` | | STROBE flow, concentration, deprivation quintiles, Moran's I / spatial-lag model |
+| Supplementary Figures S1–S7 | `114_figS_strobe.py`, `111_`, `115_`, `129_figS5_S7_deprivation_variants.py`, `131_figS4_spatial_structure.py` | | STROBE flow, concentration, deprivation quintiles, Moran's I / spatial-lag model |
 | sensitivity analyses | same scripts with `RANK=std` (suffix `_std`) or `RANK=percap` | `*_std.png`, `*_percap.png` | age-standardised rates; LTFU per capita |
 | supplement document | `116_build_supplementary_docx.py` | supplementary .docx | |
-| figure report | `107_build_manuscript_report.py` | HTML report of all figures | |
 
 The final versions of Figures 2, 3 and 5 are produced by `figure_regeneration_2026_09_09/scripts/`
 (see the README there), which reads `region_units.csv`, `region_cases.csv` and

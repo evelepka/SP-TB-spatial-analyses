@@ -10,13 +10,13 @@ numbers quoted in the manuscript.
   `fig_common.py`); run from that directory, output to `./figures/`. Paths are read from the
   environment variables `SPTB_AN` (analytic folder) and `SPTB_OUT` (output folder).
 - Verification: `./verification/` (`verify_all.py`, `verify_rates.py`, `verify_ltfu.py`,
-  `verify_ltfu2.py`, `ltfu_agestd.py`)
+  `ltfu_agestd.py`)
 
 ## What the scripts implement
 
 **Rate basis.** Panels 2d, 3b and 3c use crude rates (`inc_crude`, `drate_crude`), the primary
 basis of the analysis (ADR-0006). Axis labels read "Notification rate per 100,000/yr" and
-"Rate per 100,000/yr"; "Notifications" is used throughout rather than "Incidence".
+"Rate per 100,000/yr"; "Notifications" is used in the Figure 2 and 3 labels rather than "Incidence".
 
 **LTFU concentration (Figures 2a, 2b, 5a).** LTFU is the proportion of evaluated episodes
 (ADR-0005). The cross-fitted (de-noised) concentration curve therefore splits the evaluated

@@ -1,18 +1,14 @@
 """Manuscript composite figures 2 and 5, built end-to-end from the analytic artifacts.
 
-These composites previously had NO in-repo builder (the PAF and out-of-sample panels were
-assembled outside the pipeline).
-This script is now their single source.
+Single builder for the Figure 2 and Figure 5 composites.
 
 Figure 2 (2x2): (a) de-noised Lorenz curves  (b) de-noised shares at 5/10/20/40% of population
-               (c) 4-set hotspot Venn        (d) age-standardised rate by incidence quintile + PAF
+               (c) 4-set hotspot Venn        (d) rate by notification-rate quintile with excess fraction
 Figure 5 (1x3): (a) top-20% share per 3-yr period  (b) out-of-sample hotspot capture  (c) alluvial
 
-RANK=std (default) ranks by age-standardized rate (LTFU: age-adjusted proportion of evaluated,
-ADR-0005); RANK=crude reproduces the historical panels for the supplement (suffix _crude).
-Validation: under RANK=crude this script reproduces the July manuscript numbers
-(PAF 65% [63-67], excess 118,612; OOS capture 44/43/41 vs 48).
-Outputs: /tmp/fig2_composite{_crude}.png, /tmp/fig5_composite{_crude}.png
+RANK=crude (default) ranks by crude rate; RANK=std gives the age-standardised sensitivity version
+(suffix _std); RANK=percap gives the per-capita LTFU supplementary figure (suffix _percap).
+Outputs: /tmp/fig2_composite{SUF}.png, /tmp/fig5_composite{SUF}.png
 """
 import pandas as pd, numpy as np, os, matplotlib, matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
@@ -28,7 +24,6 @@ co=pd.read_csv("/tmp/region_cases.csv",dtype={"region_id":str})
 pv=reg.set_index("region_id")["pop"]; units=list(pv.index); idx={u:i for i,u in enumerate(units)}
 K=len(units); popv=pv.values; TOT=popv.sum()
 co["ri"]=co["region_id"].map(idx); co=co.dropna(subset=["ri"]); co["ri"]=co["ri"].astype(int)
-EXPC={"inc":"E_inc","mort":"E_dr","aband":"E_ab"}
 def base_of(ln): return _rb(reg,ln,popv)
 
 GRID=np.linspace(0,1,101)
@@ -79,7 +74,7 @@ venn(VL,ax=axC,fontsize=9,legend_loc="upper left",cmap=ListedColormap(["#1a3d5c"
 axC.set_aspect("auto"); axC.set_xlim(-0.02,1.02); axC.set_ylim(0.06,0.94)
 axC.set_title("(c)",loc="left",fontsize=13,fontweight="bold")
 
-# (d) age-standardised rate by population-weighted incidence quintile; excess vs lowest quintile; PAF
+# (d) rate on the rank basis by population-weighted notification quintile; excess vs lowest quintile; excess fraction
 T=12; state_rate=reg["n"].sum()/(reg["pop"].sum()*T)*1e5
 RC=RATE["inc"]
 el=reg.dropna(subset=[RC]).sort_values(RC).copy()   # eligible regions, ascending on the rank-basis rate
@@ -92,7 +87,7 @@ else:
     qs["rate"]=qs["n"]/(qs["pop"]*T)*1e5                     # crude rate per quintile
     qs["excess"]=qs["n"]-qs["pop"]*T*qs.loc[0,"rate"]/1e5
 tot_excess=qs["excess"][1:].sum(); paf=tot_excess/qs["n"].sum()*100
-# 95% CI by region bootstrap (the historical 63-67 was the same design; B=500)
+# 95% CI by region bootstrap (B=500)
 def _paf_of(df):
     df=df.sort_values(RC)
     cum=df["pop"].cumsum()/df["pop"].sum(); q=np.minimum((cum*5).astype(int),4)
@@ -112,7 +107,7 @@ axD.text(5.45,qs.loc[0,"rate"],"reference\n(lowest notification rate)",fontsize=
 axD.text(0.03,0.95,f"Excess fraction = {paf:.0f}%  (95% CI {ci_lo:.0f}–{ci_hi:.0f})\nExcess cases: {tot_excess:,.0f}",
          transform=axD.transAxes,va="top",fontsize=10,bbox=dict(boxstyle="round",fc="white",ec="#aaa"))
 axD.set_xlabel("Notification-rate quintile (1 = lowest → 5 = highest)")
-axD.set_ylabel("Age-standardised rate per 100,000/yr"); axD.set_xticks(range(1,6))
+axD.set_ylabel(("Age-standardised" if RANK=="std" else "Notification")+" rate per 100,000/yr"); axD.set_xticks(range(1,6))
 axD.set_title("(d)",loc="left",fontsize=13,fontweight="bold")
 plt.tight_layout(); plt.savefig(f"/tmp/fig2_composite{SUF}.png",dpi=300,bbox_inches="tight"); plt.close()
 print(f"Saved /tmp/fig2_composite{SUF}.png")
@@ -162,8 +157,8 @@ old=[capture(tr,te,base_i) for tr,te,_ in SETS]
 best=[capture(te,te,base_i) for _,te,_ in SETS]
 print(f"[{RANK}] OOS capture: old {[round(x) for x in old]} vs best {[round(x) for x in best]}")
 x=np.arange(3); w=0.36
-b.bar(x-w/2,old,w,color="#1a3d5c",label="Hotspots from old data")
-b.bar(x+w/2,best,w,color="#b9bec4",label="Best possible (current data)")
+b.bar(x-w/2,old,w,color="#1a3d5c",label="Hotspots selected on training period")
+b.bar(x+w/2,best,w,color="#b9bec4",label="Hotspots selected on test period (upper bound)")
 for xi,(o,bb) in enumerate(zip(old,best)):
     b.text(xi-w/2,o+0.8,f"{o:.0f}",ha="center",fontsize=10,fontweight="bold")
     b.text(xi+w/2,bb+0.8,f"{bb:.0f}",ha="center",fontsize=9,color="#666")

@@ -1,8 +1,8 @@
 """Composite Figure 3 (1x3): social patterning + attributable burden.
 (a) Cohen's d of each vulnerability component between hotspot and non-hotspot regions (3 outcomes)
-(b) incidence attributable to income deprivation (PAF, by household-income quintile)
+(b) notifications attributable to income deprivation (PAF, by household-income quintile)
 (c) mortality attributable to income deprivation (PAF, by household-income quintile)
-Computation reused from manuscript script 104 (a) and new-analysis script 122 (b,c).
+Computation follows scripts/104_fig4_components_hotspots.py (a) and scripts/122_manuscript_composites.py (b, c).
 """
 import os, numpy as np, pandas as pd, matplotlib
 matplotlib.use("Agg")
@@ -18,7 +18,7 @@ d = reg[reg["n"] >= 10].dropna(subset=["income", "favela", "illit", "residents"]
 d["c_income"] = -zscore(d["income"]); d["c_favela"] = zscore(d["favela"])
 d["c_illit"] = zscore(d["illit"]);   d["c_resid"] = zscore(d["residents"])
 COMP = [("c_income", "Low income"), ("c_favela", "% favela"), ("c_illit", "Illiteracy"), ("c_resid", "Residents/hh")]
-LENS = [("hs_inc", "Incidence", INC), ("hs_mort", "Mortality", MORT), ("hs_aband", "LTFU", LTFU)]
+LENS = [("hs_inc", "Notifications", INC), ("hs_mort", "Mortality", MORT), ("hs_aband", "LTFU", LTFU)]
 def cohend(col, flag):
     a = d.loc[d[flag], col]; b = d.loc[~d[flag], col]
     sp = np.sqrt((a.var() + b.var()) / 2); return (a.mean() - b.mean()) / sp if sp > 0 else np.nan
@@ -60,7 +60,7 @@ def paf_panel(ax, col, color, letter, oname, noun):
     ax.set_ylabel("Rate per 100,000/yr")
     ax.set_xticks(list(qs)); ax.set_xlim(0.4, 6.6); ax.set_ylim(0, max(rr["rates"]) * 1.32)
     ax.grid(axis="y", lw=.5, color=GRIDCLR, zorder=0); ax.spines[["top", "right"]].set_visible(False)
-    box = f"PAF = {rr['paf']:.0f}%  (95% CI {ci[0]:.0f}–{ci[1]:.0f})\n{noun}: {rr['excess']:,.0f}"
+    box = f"Excess fraction = {rr['paf']:.0f}%  (95% CI {ci[0]:.0f}–{ci[1]:.0f})\n{noun}: {rr['excess']:,.0f}"
     ax.text(.04, .985, box, transform=ax.transAxes, fontsize=9, va="top", linespacing=1.5,
             bbox=dict(boxstyle="round,pad=0.5", fc="white", ec="#ccc"))
     print(f"  {oname:9s}: PAF {rr['paf']:.0f}% [{ci[0]:.0f}-{ci[1]:.0f}] excess {rr['excess']:,.0f}")
@@ -83,5 +83,6 @@ a.set_title("(a)", loc="left", fontsize=13, fontweight="bold")
 paf_panel(AX[1], "inc_crude", INC, "b", "Notifications", "excess cases")
 paf_panel(AX[2], "drate_crude", MORT, "c", "Mortality", "excess deaths")
 
+fig.savefig(f"{OUT}/Figure3_social_attributable.pdf", bbox_inches="tight", facecolor="white")
 fig.savefig(f"{OUT}/Figure3_social_attributable.png", dpi=300, bbox_inches="tight", facecolor="white")
 print(f"saved {OUT}/Figure3_social_attributable.png")

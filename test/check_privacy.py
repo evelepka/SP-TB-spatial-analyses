@@ -2,11 +2,12 @@
 """Privacy check for a code-only repo whose data is patient-level TB notifications.
 
 FAIL (exit 1): any git-TRACKED file matches an individual-level artifact pattern. These hold
-one row per person/episode (sinan_clean id, sector, outcomes) and must never enter git —
+one row per person/episode (person/episode identifier, census sector, outcomes) and must never enter git —
 the rule PIPELINE.md states in prose, enforced here.
 
 WARN (exit 0 with output): a tracked CSV under outputs/ contains case-count cells of 1-4.
-Small-area counts below 5 are a disclosure risk; no such files are tracked in this repository.
+Small-area counts below 5 are a disclosure risk; no aggregated output files are tracked in this
+repository, and the guard stays in place should any be added.
 """
 import csv, re, subprocess, sys
 from pathlib import Path

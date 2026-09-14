@@ -5,15 +5,13 @@ Geocodes EVERY person (sinan_clean) with a residential address in the CNEFE-matc
 CNEFE-reported code, which carries preliminary "P" suffixes for many favela sectors). One row per
 person, best geocoding tier. This is only the person -> sector lookup; the EPISODE-level case
 selection (each Novo/Recidiva notification = one incident case; adults >=15; 2013-2024; ENDERECO
-PADRAO; deaths once per person) happens downstream in script 100. Keeping the geocode unrestricted
-here is deliberate: it INCLUDES people the old person-level keep=last pipeline dropped when their
-LAST record happened to be a retreatment, even though they had valid new/relapse episodes.
+PADRAO; deaths once per person) happens downstream in script 100. The geocode is unrestricted (one row per person); episode selection is applied in script 100.
 no_match persons (no coordinates) go to the Phase-2 CEP fallback (script 109).
 Output: /tmp/geocoded_cohort.csv  (sinan_clean, CD_SETOR, CD_TIPO, tier, favela)
 """
 import pandas as pd, geopandas as gpd, numpy as np
 from shapely.geometry import Point
-SP="/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Data"
+SP="/DATA_ROOT/Data"
 
 # ── GEOCODING ROWS → unified tier, best per person ─────────────────────────────
 def tier_of(lbl):

@@ -1,24 +1,22 @@
 """Build the standalone SUPPLEMENTARY MATERIAL Word document: the supplementary figures (embedded)
 and tables, separated from the main Results. Numbering: Figures S1-S9, Tables S1-S8.
-S4/S5 figures + Table S5 added 2026-08-11 (ADR-0005: LTFU as proportion; crude-ranking
-robustness; GLMM place effects). Requires /tmp figures from scripts 121/122 (RANK=crude too).
-Output: Drive .../SP-TB-spatial-analyses/Supplementary_material/SP_TB_Manuscript_Supplementary.docx
+Requires the /tmp outputs of scripts 114, 111, 129, 131, 122 (RANK=percap), 124 (RANK=std), 121 and 125.
+Output: /DATA_ROOT/Supplementary_material/SP_TB_Manuscript_Supplementary.docx
 """
 import pandas as pd, os, json, shutil
 from docx import Document
 from docx.shared import Pt, RGBColor, Inches
-SUP=("/DATA_ROOT/WHO modelling Project/SP-TB-spatial-analyses/Supplementary_material")
+SUP=("/DATA_ROOT/Supplementary_material")
 FIG=f"{SUP}/figures"; OUT=f"{SUP}/SP_TB_Manuscript_Supplementary.docx"
 os.makedirs(FIG,exist_ok=True)
-# stage the S-figures from their generating scripts' /tmp outputs (114, 111, 88, 122-crude)
+# stage the S-figures from their generating scripts' /tmp outputs (114, 111; the IPVS validation figure is produced outside this pipeline)
 _SRC={"figS1_strobe_flow.png":"/tmp/figS_strobe.png",
       "figS2_denoising.png":"/tmp/figS1_denoising.png",
       "figS3_ipvs_validation.png":"/tmp/fig_ipvs_validation.png"}
-import shutil as _sh
 for dst,src in _SRC.items():
-    if os.path.exists(src): _sh.copy(src,f"{FIG}/{dst}")
+    if os.path.exists(src): shutil.copy(src,f"{FIG}/{dst}")
     elif not os.path.exists(f"{FIG}/{dst}"):
-        raise SystemExit(f"faltando {src} (rode o script gerador) e sem cópia prévia de {dst}")
+        raise SystemExit(f"missing {src} (run the generating script) and no previous copy of {dst}")
 
 doc=Document()
 st=doc.styles["Normal"]; st.font.name="Calibri"; st.font.size=Pt(11)
@@ -106,8 +104,7 @@ figcap("Supplementary Figure S3.","External validation of the place-based vulner
        "IPVS (ρ = 0.72) and correlated strongly with our composite (ρ = 0.89), indicating consistency "
        "with an established, independently developed index (see Supplementary Table S8).",
        "figS3_ipvs_validation.png",w=6.2)
-# S4 — legacy figure carried from the V1 supplement (generator pending); S5–S7 from scripts/129 (ADR-0006)
-LEG=json.load(open(f"{FIG}/legacy_captions.json"))
+# S4 from scripts/131; S5–S7 from scripts/129
 if os.path.exists("/tmp/figS4_spatial_structure.png"): shutil.copy("/tmp/figS4_spatial_structure.png",f"{FIG}/figS4_spatial_structure.png")   # scripts/131
 figcap("Supplementary Figure S4.","Spatial structure of tuberculosis outcomes. (a) Global Moran's I (queen contiguity, "
        "row-standardized weights, 999 permutations) on log region-level rates for tuberculosis notifications, mortality "
@@ -176,7 +173,7 @@ mktable(["Target region size","Regions, n","Regions ≥10 cases","Median adults"
          ["≈8,000","5,131","3,790","8,208","44.6","45 / 41 / 50","−0.70 / +0.81"]],fs=8.5,
         note="Concentration = de-noised share of events in the top 20% of the population by rate. "
              "Cohen's d = standardized difference (notification-hotspot vs non-hotspot), income oriented so "
-             "negative = poorer hotspots. Findings are stable across region sizes." "This table was computed when the analysis ranked LTFU per capita (Supplementary Figure S8) and is retained on that basis; on the primary basis the main-analysis values are 45 / 39 / 24 and d = 0.64 for income. Incidence and mortality are unaffected by the ranking basis.")
+             "negative = poorer hotspots. Findings are stable across region sizes. " "This table was computed when the analysis ranked LTFU per capita (Supplementary Figure S8) and is retained on that basis; on the primary basis the main-analysis values are 45 / 39 / 24 and d = 0.64 for income. Incidence and mortality are unaffected by the ranking basis.")
 # S3 — excluded domains
 tblcap("Supplementary Table S3.","Candidate domains tested and excluded from the place-based vulnerability index.")
 mktable(["Candidate domain","Observation"],
@@ -193,8 +190,7 @@ mktable(["Geocoded set","Episodes, n","Notifications","TB mortality","Loss to fo
         note="Values are the de-noised share (%) of events in the top 20% of the population living in the "
              "highest-rate regions (LTFU as the proportion of evaluated episodes, as in the main analysis). "
              "Concentration is essentially unchanged when postal-code-level cases are excluded.")
-# S5/S6 — recovered verbatim from the 2026-08-04 dated supplement (generator scripts lived in a
-# (values kept as validation targets)
+# Tables S5 and S6: out-of-sample capture (script 122) and the regionalisation sensitivity run
 tblcap("Supplementary Table S5.","Out-of-sample capture of notified cases at matched 20% population coverage.")
 mktable(["Training window","Test window","Region-level hotspots","Whole municipalities","No targeting"],
         [["2013–2018","2019–2024","44%","16%","20%"],
@@ -223,7 +219,7 @@ mktable(["Spatial unit","Units, n","Notification rate, least→most deprived qui
              "the coarser administrative unit (11%) reflects greater within-unit income heterogeneity, which "
              "attenuates area-level exposures — a general feature of aggregated analyses (the modifiable "
              "areal unit problem).")
-# S5 — GLMM place effects on LTFU (script 121; ADR-0005)
+# S7 — GLMM place effects on LTFU (script 121; ADR-0005)
 if os.path.exists("/tmp/ltfu_glmm_ors.csv") and os.path.exists("/tmp/ltfu_glmm_summary.json"):
     g=json.load(open("/tmp/ltfu_glmm_summary.json")); ors=pd.read_csv("/tmp/ltfu_glmm_ors.csv")
     LBL={"ageband[15, 20)":"Age 15–19 (vs 30–39)","ageband[20, 25)":"Age 20–24","ageband[25, 30)":"Age 25–29",
@@ -250,9 +246,9 @@ if os.path.exists("/tmp/ltfu_glmm_ors.csv") and os.path.exists("/tmp/ltfu_glmm_s
                  "separately (indication/mediation, not pure confounding). Age adjustment uses the "
                  "individual-level age of evaluated episodes; no population denominators are involved.")
 else:
-    print("AVISO: /tmp/ltfu_glmm_* ausentes — rode scripts/121 antes; Tabela S5 omitida.")
+    print("WARNING: /tmp/ltfu_glmm_* missing — run scripts/121 first; Supplementary Table S7 omitted.")
 
-# S8 — IBP sensitivity (script 125; JC comments)
+# S8 — IBP sensitivity (script 125)
 if os.path.exists("/tmp/ibp_sensitivity.json"):
     ib=json.load(open("/tmp/ibp_sensitivity.json"))
     tblcap("Supplementary Table S8.",
@@ -269,6 +265,6 @@ if os.path.exists("/tmp/ibp_sensitivity.json"):
                  f"and its omission of informal-settlement residence, a salient axis of tuberculosis risk in "
                  f"this setting, motivating the setting-specific composite.")
 else:
-    print("AVISO: /tmp/ibp_sensitivity.json ausente — rode scripts/125; Tabela S8 omitida.")
+    print("WARNING: /tmp/ibp_sensitivity.json missing — run scripts/125 first; Supplementary Table S8 omitted.")
 
 doc.save(OUT); print("Saved:",OUT)

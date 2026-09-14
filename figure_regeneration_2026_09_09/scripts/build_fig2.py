@@ -1,7 +1,7 @@
 """Composite Figure 2 (2x2): geographic concentration of TB + geographic-inequality PAF.
 (a) de-noised Lorenz curves   (b) top-k concentration shares   (c) 4-set hotspot Venn
-(d) geographic-inequality PAF in incidence (all Sao Paulo; reference = lowest-incidence quintile)
-Computation reused verbatim from manuscript script 102 (a,b,c) and new-analysis script 122 (d).
+(d) geographic-inequality excess fraction in notifications (all Sao Paulo; reference = lowest-incidence quintile)
+Computation follows scripts/102_fig1_concentration_region.py (a-c) and scripts/122_manuscript_composites.py (d).
 """
 import os, numpy as np, pandas as pd, matplotlib
 matplotlib.use("Agg")
@@ -141,6 +141,7 @@ d.text(.04, .985, box, transform=d.transAxes, fontsize=9, va="top", linespacing=
        bbox=dict(boxstyle="round,pad=0.5", fc="white", ec="#ccc"))
 panel_tag(d, "d")
 
+fig.savefig(f"{OUT}/Figure2_concentration.pdf", bbox_inches="tight", facecolor="white")
 fig.savefig(f"{OUT}/Figure2_concentration.png", dpi=300, bbox_inches="tight", facecolor="white")
 print(f"saved {OUT}/Figure2_concentration.png")
 print("  top-20% shares: " + ", ".join(f"{l} {d[2]:.1f}%" for l, d, _, _, _ in res))

@@ -17,7 +17,7 @@ env/
 .idea/
 .vscode/
 
-# Data — stored in Google Drive, not committed
+# Data — kept in the local data folder, not committed
 data/
 Data/
 *.csv
