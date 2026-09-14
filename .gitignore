@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+.Python
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+
+# Editors
+.DS_Store
+.idea/
+.vscode/
+
+# Data — stored in Google Drive, not committed
+data/
+Data/
+*.csv
+*.json
+*.parquet
+*.feather
+*.rds
+*.zip
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.sbn
+*.sbx
+*.geojson
+*.tif
+*.tiff
+
+# Outputs
+figures/
+results/
+output/
+*.png
+*.pdf
+*.svg
+*.docx
+
+# Logs
+*.log
+
+# ----------------------------------------------------------------------
+# Exceptions: aggregated outputs from GSP vulnerability typology work
+# Small CSVs aggregated to neighborhood/FCU level (no individual data)
+# kept for reproducibility of strategy discussion document.
+# ----------------------------------------------------------------------
+!outputs/aggregates/*.csv
+!docs/*.md
